@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Vitrine</string>
+
+    <!-- Strings related to server connection -->
+    <string name="login_url">http://10.0.2.2/vitrine/login.php</string>
+    <string name="subscription_url">http://10.0.2.2/vitrine/getsubscription.php</string>
+    <string name="getpictures_url">http://10.0.2.2/vitrine/getpictures.php</string>
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_incorrect_credentials">This username and password doesn\'t match</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+</resources>
