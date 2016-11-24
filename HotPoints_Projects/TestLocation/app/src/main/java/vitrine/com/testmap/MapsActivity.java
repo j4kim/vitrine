@@ -152,6 +152,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
 
+            for (Vitrine vitrine : VitrineLoader.VITRINES) {
+                addVitrineCircle(vitrine);
+            }
+                    
             addVitrineCircle("Gare",200, Color.RED, new LatLng(46.996914, 6.935760));
             addVitrineCircle("HE-Arc",100, Color.BLUE, latlng);
 
@@ -159,8 +163,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
                 @Override
                 public void onCircleClick(Circle circle) {
-                    //Toast toast = Toast.makeText(getApplicationContext(), circle.getCenter().toString()+" : "+circle.getId(), Toast.LENGTH_LONG);
-                    //toast.show();
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),16));
 
                     Vitrine vitrine = vitrines.get(circle.getId());
@@ -173,44 +175,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     //todo
                                 }
                             });
-
                     snackbar.show();
                 }
             });
-
-
-            /*
-
-            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
-                            (Context.LAYOUT_INFLATER_SERVICE);
-                    View view = inflater.inflate(R.layout.info_window,null);
-                    TextView tv = (TextView) view.findViewById(R.id.textView);
-                    tv.setText("HE-ARC");
-                    return view;
-                }
-
-                @Override
-                public View getInfoContents(Marker marker) {
-                    return null;
-                }
-            });
-
-            Marker melbourne = mMap.addMarker(new MarkerOptions()
-                    .position(latlng)
-                    .title("HE-Arc")
-                    .snippet("Nombre de participations : 12")
-            );
-            melbourne.showInfoWindow();
-
-            */
         }
     }
 
+    private void addVitrineCircle(Vitrine vitrine){
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(vitrine.getLatLng());
+        circleOptions.radius(vitrine.getRadius());
+
+        int color = vitrine.getColor();
+        circleOptions.fillColor(Color.argb(90,Color.red(color),Color.green(color),Color.blue(color)));
+        circleOptions.strokeColor(Color.argb(120,Color.red(color),Color.green(color),Color.blue(color)));
+        circleOptions.clickable(true);
+
+        // Get back the mutable Circle
+        Circle circle = mMap.addCircle(circleOptions);
+        vitrines.put(circle.getId(),vitrine);
+    }
+
     private void addVitrineCircle(String name, int radius, int color, LatLng latlng) {
-        Vitrine vitrine = new Vitrine(name,radius,color,latlng);
+        Vitrine vitrine = new Vitrine(name,radius,latlng,color);
 
         // Instantiates a new CircleOptions object and defines the center and radius
         CircleOptions circleOptions = new CircleOptions();

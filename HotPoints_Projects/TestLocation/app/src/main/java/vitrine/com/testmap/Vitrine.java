@@ -1,5 +1,7 @@
 package vitrine.com.testmap;
 
+import android.graphics.Color;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -7,10 +9,28 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Vitrine {
     private String nom;
+    private LatLng latLng;
+    private int radius;
+    private int color;
 
-    public Vitrine(String nom, int radius, int color, LatLng latlng){
+    public Vitrine(String nom, int radius, LatLng latlng, int color){
         this.nom = nom;
+        this.radius = radius;
+        this.latLng = latlng;
+        this.color = color;
+    }
+
+    public int getColor() {
+        return color;
     }
 
     public String getNom(){return nom;}
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
 }
