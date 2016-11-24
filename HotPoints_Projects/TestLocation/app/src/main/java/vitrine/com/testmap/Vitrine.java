@@ -30,7 +30,7 @@ public class Vitrine {
         return latLng;
     }
 
-    public double getRadius() {
+    public int getRadius() {
         return radius;
     }
 }

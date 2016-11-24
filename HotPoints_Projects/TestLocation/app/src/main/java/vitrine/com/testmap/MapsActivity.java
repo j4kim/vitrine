@@ -26,6 +26,8 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
@@ -41,6 +43,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastLocation;
 
     private HashMap<Circle,Vitrine> circlesVitrines;
+
+    private Circle lastClickedCircle=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +135,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
 
+            // trie les plus grande en premier comme ça elle sont dessinée avant les petites
+            Collections.sort(VitrineLoader.VITRINES, new Comparator<Vitrine>() {
+                @Override
+                public int compare(Vitrine o1, Vitrine o2) {
+                    return o2.getRadius() - o1.getRadius();
+                }
+            });
+
             for (Vitrine vitrine : VitrineLoader.VITRINES) {
                 addVitrineCircle(vitrine);
             }
@@ -138,23 +150,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
                 @Override
                 public void onCircleClick(Circle circle) {
-
                     Vitrine vitrine = circlesVitrines.get(circle);
 
-                    double x = vitrine.getRadius();
-                    // fonction trouvée par LoggerPro
-                    float y = (float) (25.77*Math.pow(x,-0.09));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),y));
+                    if(circle.equals(lastClickedCircle)){
+                        circle.setZIndex(circle.getZIndex()-1);
 
-                    Snackbar snackbar = Snackbar
-                            .make(getWindow().getDecorView(),vitrine.getNom(), Snackbar.LENGTH_LONG)
-                            .setAction("Voir", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //todo
-                                }
-                            });
-                    snackbar.show();
+                        Toast toast2 = Toast.makeText(getApplicationContext(), vitrine.getNom()+" mise à l'arrière plan", Toast.LENGTH_SHORT);
+                        toast2.show();
+                    }else{
+
+                        double x = vitrine.getRadius();
+                        // fonction trouvée par LoggerPro
+                        float y = (float) (25.77*Math.pow(x,-0.09));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),y));
+
+                        Snackbar snackbar = Snackbar
+                                .make(getWindow().getDecorView(),vitrine.getNom(), Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Voir", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //todo
+                                    }
+                                });
+                        snackbar.show();
+
+                        lastClickedCircle=circle;
+                    }
                 }
             });
         }
@@ -167,7 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         int color = vitrine.getColor();
         circleOptions.fillColor(Color.argb(90,Color.red(color),Color.green(color),Color.blue(color)));
-        circleOptions.strokeColor(Color.argb(120,Color.red(color),Color.green(color),Color.blue(color)));
+        circleOptions.strokeColor(Color.argb(180,Color.red(color),Color.green(color),Color.blue(color)));
         circleOptions.clickable(true);
 
         // Get back the mutable Circle
