@@ -2,9 +2,9 @@
     <string name="app_name">Vitrine</string>
 
     <!-- Strings related to server connection -->
-    <string name="login_url">http://10.0.2.2/vitrine/login.php</string>
-    <string name="subscription_url">http://10.0.2.2/vitrine/getsubscription.php</string>
-    <string name="getpictures_url">http://10.0.2.2/vitrine/getpictures.php</string>
+    <string name="login_url">http://j4kim.nexgate.ch/vitrine/login.php</string>
+    <string name="subscription_url">http://j4kim.nexgate.ch/vitrine/getsubscription.php</string>
+    <string name="getpictures_url">http://j4kim.nexgate.ch/vitrine/getpictures.php</string>
 
 
     <!-- Strings related to login -->
