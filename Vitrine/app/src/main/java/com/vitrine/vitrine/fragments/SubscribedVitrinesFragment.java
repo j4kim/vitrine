@@ -1,19 +1,25 @@
-package com.vitrine.vitrine;
+package com.vitrine.vitrine.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.vitrine.vitrine.NetworkTools;
+import com.vitrine.vitrine.R;
+import com.vitrine.vitrine.TabActivity;
+import com.vitrine.vitrine.User;
+import com.vitrine.vitrine.Vitrine;
+import com.vitrine.vitrine.VitrineAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,39 +27,41 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-public class SubscribedVitrinesActivity extends AppCompatActivity {
+public class SubscribedVitrinesFragment extends Fragment {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private RetrieveVitrineTask mRetrieveTask = null;
+    private RetrieveVitrineTask mRetrieveTask;
 
     // UI references
     private View mProgressView;
     private ListView mSubscribedListView;
     private ArrayList<Vitrine> mVitrineList;
+    private  FragmentActivity fa;
+    private LinearLayout llLayout;
 
     private User user;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subscribed_vitrines);
-        Intent i = getIntent();
-        user = i.getParcelableExtra("user");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaceState) {
+        fa = (FragmentActivity) super.getActivity();
+        llLayout = (LinearLayout) inflater.inflate(R.layout.fragment_subscribed_vitrines, container, false);
+
+        user = ((TabActivity)getActivity()).getUser();
 
         mVitrineList = new ArrayList<>();
 
-        mSubscribedListView = (ListView)findViewById(R.id.subscribed_listview);
-        mProgressView = findViewById(R.id.subscribed_progress);
+        mSubscribedListView = (ListView)llLayout.findViewById(R.id.subscribed_listview);
+        mProgressView = llLayout.findViewById(R.id.subscribed_progress);
 
-        VitrineAdapter adapter = new VitrineAdapter(this, mVitrineList);
+        VitrineAdapter adapter = new VitrineAdapter(fa, mVitrineList);
         mSubscribedListView.setAdapter(adapter);
 
         showProgress(true);
         retrieveVitrines();
+
+        return llLayout;
     }
+
 
     private void retrieveVitrines(){
         if (mRetrieveTask != null) {
@@ -118,6 +126,7 @@ public class SubscribedVitrinesActivity extends AppCompatActivity {
             //attempt retrieving a list of vitrines.
             boolean success = false;
             try {
+                Thread.sleep(1500);
                 String response = NetworkTools.connect(getString(R.string.subscription_url) + "?token=" + mUserToken);
 
                 JSONObject jsonObject = new JSONObject(response);
@@ -145,6 +154,8 @@ public class SubscribedVitrinesActivity extends AppCompatActivity {
                 success = true;
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
             return success;
@@ -159,7 +170,7 @@ public class SubscribedVitrinesActivity extends AppCompatActivity {
                 showProgress(false);
             } else {
                 //Probleme lors de la reception des vitrines
-                finish();
+
             }
         }
 

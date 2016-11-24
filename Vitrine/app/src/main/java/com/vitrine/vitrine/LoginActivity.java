@@ -176,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(activity, SubscribedVitrinesActivity.class);
+                Intent intent = new Intent(activity, TabActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
             } else {
