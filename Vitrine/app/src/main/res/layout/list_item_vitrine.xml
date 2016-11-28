@@ -6,5 +6,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/vitrineName" />
+        android:id="@+id/vitrineName"
+        android:text="vitrine name"
+        android:textSize="21sp" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/vitrineDescr" />
 </LinearLayout>

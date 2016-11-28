@@ -126,7 +126,6 @@ public class SubscribedVitrinesFragment extends Fragment {
             //attempt retrieving a list of vitrines.
             boolean success = false;
             try {
-                Thread.sleep(1500);
                 String response = NetworkTools.connect(getString(R.string.subscription_url) + "?token=" + mUserToken);
 
                 JSONObject jsonObject = new JSONObject(response);
@@ -154,10 +153,7 @@ public class SubscribedVitrinesFragment extends Fragment {
                 success = true;
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-
             return success;
         }
 
