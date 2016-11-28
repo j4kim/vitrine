@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.vitrine.vitrine.fragments.DiscoverFragment;
 import com.vitrine.vitrine.fragments.SubscribedVitrinesFragment;
 
 import java.util.ArrayList;
@@ -20,8 +21,6 @@ public class TabActivity extends AppCompatActivity {
 
 
     private User mUser;
-    private ArrayList<Vitrine> mListSubscribed;
-    private ArrayList<Vitrine> mListNear;
 
 
     /**
@@ -46,8 +45,6 @@ public class TabActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         mUser = i.getParcelableExtra("user");
-        mListNear = new ArrayList<>();
-        mListSubscribed = new ArrayList<>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,16 +103,15 @@ public class TabActivity extends AppCompatActivity {
             switch (position)
             {
                 case 0:
-                    break;
+                    return new SubscribedVitrinesFragment();
                 case 1:
-                    break;
+                    return new SubscribedVitrinesFragment();
                 case 2:
-                    break;
+                    return new DiscoverFragment();
                 default:
-                    break;
+                    return new SubscribedVitrinesFragment();
             }
 
-            return new SubscribedVitrinesFragment();
         }
 
         @Override

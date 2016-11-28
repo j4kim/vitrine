@@ -36,21 +36,19 @@ public class SubscribedVitrinesFragment extends Fragment {
     private View mProgressView;
     private ListView mSubscribedListView;
     private ArrayList<Vitrine> mVitrineList;
-    private  FragmentActivity fa;
-    private LinearLayout llLayout;
 
     private User user;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaceState) {
-        fa = (FragmentActivity) super.getActivity();
-        llLayout = (LinearLayout) inflater.inflate(R.layout.fragment_subscribed_vitrines, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FragmentActivity fa = super.getActivity();
+        LinearLayout llLayout = (LinearLayout) inflater.inflate(R.layout.fragment_subscribed_vitrines, container, false);
 
         user = ((TabActivity)getActivity()).getUser();
 
         mVitrineList = new ArrayList<>();
 
-        mSubscribedListView = (ListView)llLayout.findViewById(R.id.subscribed_listview);
+        mSubscribedListView = (ListView) llLayout.findViewById(R.id.subscribed_listview);
         mProgressView = llLayout.findViewById(R.id.subscribed_progress);
 
         VitrineAdapter adapter = new VitrineAdapter(fa, mVitrineList);
