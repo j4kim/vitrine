@@ -1,7 +1,10 @@
 package com.vitrine.vitrine;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +23,15 @@ public class Vitrine implements Parcelable {
     private double latitude;
     private double longitude;
     private ArrayList<String> pictures;
+    private int color;
+
+    public Vitrine(String nom, int radius, double latitude, double longitude, int color){
+        this.name = nom;
+        this.radius = radius;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.color = color;
+    }
 
     public Vitrine(String jsonResponse) throws JSONException {
         JSONObject mainObject = new JSONObject(jsonResponse);
@@ -29,6 +41,7 @@ public class Vitrine implements Parcelable {
         latitude = mainObject.getDouble("latitude");
         longitude = mainObject.getDouble("longitude");
         pictures = new ArrayList<>();
+        color = Color.BLUE;
     }
 
     /*
@@ -54,13 +67,11 @@ public class Vitrine implements Parcelable {
         return radius;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public LatLng getLatLng() {
+        return new LatLng(latitude, longitude);
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
+    public int getColor() { return color; }
 
 
 
