@@ -1,11 +1,16 @@
 package com.vitrine.vitrine.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,18 +51,6 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
 
         mListVitrine = new ArrayList<>();
 
-        //TODO : GET LIST FROM THE SERVER
-        /*
-        mListVitrine.add(new Vitrine("HE-Arc",123, 46.997637, 6.938717, Color.BLUE));
-        mListVitrine.add(new Vitrine("Gare",212, 46.996914, 6.935760, Color.RED));
-        mListVitrine.add(new Vitrine("Parc technologique St-Imier",356, 47.154859, 7.002969, Color.YELLOW));
-        mListVitrine.add(new Vitrine("La Chaux-de-Fonds",1400, 47.103189, 6.827200, Color.GREEN));
-        mListVitrine.add(new Vitrine("Suze",300, 47.149228, 7.003468, Color.CYAN));
-        mListVitrine.add(new Vitrine("Gare de St-Imier",200, 47.151649, 7.001159, Color.MAGENTA));
-        mListVitrine.add(new Vitrine("Le Coyote Bar",100, 47.101729, 6.825017, Color.BLACK));
-        */
-
-
         retrieveVitrines();
 
         return inflater.inflate(R.layout.fragment_discover, container, false);
@@ -78,6 +71,18 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(46.996914,6.93576),15));
+
+
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+            Log.i("PERMISSION", "permission accordée");
+        } else {
+            // Show rationale and request permission.
+            Log.i("PERMISSION", "permission refusée");
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 12);
+        }
+
 
         circlesVitrines = new HashMap<>();
 
