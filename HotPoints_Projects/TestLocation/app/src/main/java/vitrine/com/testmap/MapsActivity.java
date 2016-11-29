@@ -155,8 +155,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(circle.equals(lastClickedCircle)){
                         circle.setZIndex(circle.getZIndex()-1);
 
-                        Toast toast2 = Toast.makeText(getApplicationContext(), vitrine.getNom()+" mise à l'arrière plan", Toast.LENGTH_SHORT);
-                        toast2.show();
+                        //Toast toast2 = Toast.makeText(getApplicationContext(), vitrine.getNom()+" mise à l'arrière plan", Toast.LENGTH_SHORT);
+                        //toast2.show();
+                        lastClickedCircle=null;
                     }else{
 
                         double x = vitrine.getRadius();
@@ -165,7 +166,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),y));
 
                         Snackbar snackbar = Snackbar
-                                .make(getWindow().getDecorView(),vitrine.getNom(), Snackbar.LENGTH_INDEFINITE)
+                                .make(getWindow().getDecorView(),vitrine.getNom(), Snackbar.LENGTH_LONG)
                                 .setAction("Voir", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {

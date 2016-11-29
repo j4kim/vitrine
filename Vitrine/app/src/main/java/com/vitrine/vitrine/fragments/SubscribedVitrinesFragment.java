@@ -152,7 +152,6 @@ public class SubscribedVitrinesFragment extends Fragment {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-
             return success;
         }
 

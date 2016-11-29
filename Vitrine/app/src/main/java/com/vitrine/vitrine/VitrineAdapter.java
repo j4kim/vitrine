@@ -48,8 +48,11 @@ public class VitrineAdapter extends BaseAdapter {
         View rowView = mInflater.inflate(R.layout.list_item_vitrine, viewGroup, false);
 
         TextView nameTextView = (TextView) rowView.findViewById(R.id.vitrineName);
+        TextView descrTextView = (TextView) rowView.findViewById(R.id.vitrineDescr);
+
         Vitrine v = (Vitrine) getItem(i);
         nameTextView.setText(v.getName());
+        descrTextView.setText("12 nouvelles contributions");
 
         return rowView;
     }
