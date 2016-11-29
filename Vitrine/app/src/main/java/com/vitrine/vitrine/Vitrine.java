@@ -41,8 +41,13 @@ public class Vitrine implements Parcelable {
         radius = mainObject.getDouble("radius");
         latitude = mainObject.getDouble("latitude");
         longitude = mainObject.getDouble("longitude");
+        Log.i("JSON RESPONSE",jsonResponse);
+        try{
+            color = Color.parseColor(mainObject.getString("color"));
+        }catch (IllegalArgumentException e){
+            color = Color.BLUE;
+        }
         pictures = new ArrayList<>();
-        color = Color.BLUE;
         Log.i("VITRINE", "lat = " + latitude + " / Long = " + longitude + " / radius = " + radius);
 
     }
