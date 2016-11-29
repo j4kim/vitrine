@@ -3,6 +3,7 @@ package com.vitrine.vitrine;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -42,6 +43,8 @@ public class Vitrine implements Parcelable {
         longitude = mainObject.getDouble("longitude");
         pictures = new ArrayList<>();
         color = Color.BLUE;
+        Log.i("VITRINE", "lat = " + latitude + " / Long = " + longitude + " / radius = " + radius);
+
     }
 
     /*
