@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,9 +94,10 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
                 if(circle.equals(lastClickedCircle)){
                     circle.setZIndex(circle.getZIndex()-1);
 
-
                     Toast toast2 = Toast.makeText(getActivity().getApplicationContext(), vitrine.getName()+" mise à l'arrière plan", Toast.LENGTH_SHORT);
                     toast2.show();
+
+                    lastClickedCircle=null;
                 }else{
 
                     double x = vitrine.getRadius();
@@ -103,17 +105,15 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
                     float y = (float) (25.77*Math.pow(x,-0.09));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(),y));
 
-                    /*
-                    //TODO: CONVERT SNACKBAR TO WORK IN A FRAGMENT
                     Snackbar snackbar = Snackbar
-                            .make(getWindow().getDecorView(),vitrine.getNom(), Snackbar.LENGTH_INDEFINITE)
+                            .make(getView(), vitrine.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Voir", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
 
                                 }
                             });
-                    snackbar.show();*/
+                    snackbar.show();
 
                     lastClickedCircle=circle;
                 }
