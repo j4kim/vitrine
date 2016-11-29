@@ -1,0 +1,9 @@
+Pour tester, il y a un compte username = loris / password = test
+
+Dans le dossier hotpoints_projects, il y a un projet pour la carte avec la géolocalisation (testLocation), un projet pour la communication avec le  serveur (tesComServeur) et un projet qui utilise la camera pour prendre une photo (testCamera).
+
+Le projet principal Vitrine contient la communication avec le serveur et une partie de la map avec géolocalisation.
+
+Les vitrines d'example se trouvent a neuchatel et chaux-de-fonds
+
+Le dossier www contient une copie du serveur.
