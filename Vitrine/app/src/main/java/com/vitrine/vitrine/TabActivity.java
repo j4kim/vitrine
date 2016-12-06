@@ -129,16 +129,27 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
         if (permission_location) {
             Log.i("TAB ACTIVITY", "permission accordée");
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            if(mLastLocation!=null)
+                return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            else
+                return null;
         }
         Log.i("TAB ACTIVITY", "permission refusée");
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 12);
         return null;
     }
 
+    private String getLocationString() {
+        LatLng latlng = getLocation();
+        if(latlng!=null)
+            return latlng.toString();
+        else
+            return "location disabled";
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Toast.makeText(this, getLocation().toString(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getLocationString(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
