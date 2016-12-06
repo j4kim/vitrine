@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.vitrine.vitrine.fragments.ContributeFragment;
 import com.vitrine.vitrine.fragments.DiscoverFragment;
 import com.vitrine.vitrine.fragments.SubscribedVitrinesFragment;
 
@@ -105,7 +106,7 @@ public class TabActivity extends AppCompatActivity {
                 case 0:
                     return new SubscribedVitrinesFragment();
                 case 1:
-                    return new SubscribedVitrinesFragment();
+                    return new ContributeFragment();
                 case 2:
                     return new DiscoverFragment();
                 default:
