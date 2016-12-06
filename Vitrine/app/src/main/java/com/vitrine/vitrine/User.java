@@ -59,4 +59,9 @@ public class User implements Parcelable{
         parcel.writeString(email);
         parcel.writeString(token);
     }
+
+    public String toJson(){
+        // {"username":"loris","email":"loris@loris.com","token":"asdfasdfasdfasdfhasdfjhsaidfhinsofdnsiodofnaosdfinoasdifn"}
+        return "{\"username\":\""+name+"\",\"email\":\""+email+"\",\"token\":\""+token+"\"}";
+    }
 }

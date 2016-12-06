@@ -5,12 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,6 +24,7 @@ import java.io.IOException;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+    public static final String PREFS_NAME = "MyPrefsFile";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -55,6 +56,22 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        //If user persistence exist, pass it to tabactivity and dont show login
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if (settings.contains("userJson"))
+        {
+            String userJson = settings.getString("userJson", null);
+            try {
+                User user = new User(userJson);
+                Intent intent = new Intent(this, TabActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**
@@ -176,6 +193,15 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
+
+                // User storage for no-login
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("userJson", user.toJson());
+
+                // Commit the edits!
+                editor.commit();
+
                 Intent intent = new Intent(activity, TabActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);

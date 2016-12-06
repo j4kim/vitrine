@@ -34,6 +34,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.model.LatLng;
+import com.vitrine.vitrine.fragments.ContributeFragment;
 import com.vitrine.vitrine.fragments.DiscoverFragment;
 import com.vitrine.vitrine.fragments.SubscribedVitrinesFragment;
 
@@ -239,7 +240,7 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
                 case 0:
                     return new SubscribedVitrinesFragment();
                 case 1:
-                    return new SubscribedVitrinesFragment();
+                    return new ContributeFragment();
                 case 2:
                     return new DiscoverFragment();
                 default:
