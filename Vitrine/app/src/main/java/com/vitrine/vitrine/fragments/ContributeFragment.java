@@ -13,12 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.vitrine.vitrine.ContributeActivity;
 import com.vitrine.vitrine.NetworkTools;
+import com.vitrine.vitrine.CreateActivity;
 import com.vitrine.vitrine.R;
 import com.vitrine.vitrine.TabActivity;
 import com.vitrine.vitrine.User;
@@ -55,6 +56,8 @@ public class ContributeFragment extends Fragment {
         mContributeListView = (ListView) llLayout.findViewById(R.id.contribute_listview);
         mProgressView = llLayout.findViewById(R.id.contribute_progress);
 
+        Button btnNewVitrine = (Button) llLayout.findViewById(R.id.btnNewVitrine);
+
         VitrineAdapter adapter = new VitrineAdapter(fa, mVitrineList);
         mContributeListView.setAdapter(adapter);
 
@@ -64,6 +67,14 @@ public class ContributeFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), ContributeActivity.class);
                 intent.putExtra("vitrine", mVitrineList.get(i));
+                startActivity(intent);
+            }
+        });
+
+        btnNewVitrine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CreateActivity.class);
                 startActivity(intent);
             }
         });

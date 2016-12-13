@@ -261,9 +261,9 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
                 case 0:
                     return "Subs";
                 case 1:
-                    return "Pics";
+                    return "Contrib";
                 case 2:
-                    return "Near";
+                    return "Explore";
             }
             return null;
         }
