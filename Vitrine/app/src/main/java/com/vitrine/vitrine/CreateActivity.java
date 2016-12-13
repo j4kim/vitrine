@@ -1,14 +1,19 @@
 package com.vitrine.vitrine;
 
+import android.app.Activity;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Random;
 
 public class CreateActivity extends AppCompatActivity {
@@ -56,7 +61,7 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String name = ((EditText)findViewById(R.id.etName)).getText().toString();
-                String result = NetworkTools.postVitrine(name, radius, hexColor);
+                new PostVitrineTask(CreateActivity.this, name, radius, hexColor).execute();
             }
         });
 
@@ -107,5 +112,40 @@ public class CreateActivity extends AppCompatActivity {
         b = ((SeekBar)findViewById(R.id.sbB)).getProgress();
         hexColor = String.format("#%02x%02x%02x", r, g, b);
         btnCreate.setBackgroundColor(Color.parseColor(hexColor));
+    }
+
+
+
+
+    public class PostVitrineTask extends AsyncTask<Void, Void, String>{
+
+        private final Activity activity;
+        private final String name;
+        private final String hexColor;
+        private final int radius;
+
+        public PostVitrineTask(Activity activity, String name, int radius, String hexColor) {
+            this.activity=activity;
+            this.name=name;
+            this.radius=radius;
+            this.hexColor=hexColor;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String result = null;
+            try {
+                return NetworkTools.postVitrine(name, radius, hexColor);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String str) {
+            Toast.makeText(CreateActivity.this, str, Toast.LENGTH_SHORT).show();
+            Log.i("HTTP RESULT",str);
+        }
     }
 }
