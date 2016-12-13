@@ -29,4 +29,9 @@ public class NetworkTools {
         return total.toString();
 
     }
+
+    public static String postVitrine(String name, int radius, String hexColor) {
+
+        return "error";
+    }
 }
