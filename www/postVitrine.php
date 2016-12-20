@@ -9,19 +9,22 @@
 	$user = $_POST["user"];
 	
 	try{
-		$req = $conn->prepare("INSERT INTO vitrine (name, radius, latitude, longitude, color) VALUES (:name, :radius, :latitude, :longitude, :color)");
-		$result = $req->execute(array(
+		$req = $conn->prepare("
+			INSERT INTO vitrine (name, radius, latitude, longitude, color) VALUES (:name, :radius, :latitude, :longitude, :color);
+			insert into subscribe (fk_user_id, fk_vitrine_id) values ((select id from user where username = :user), LAST_INSERT_ID())");
+		$result = $req->execute([
 			":name" => $name, 
 			":radius" => $radius,
 			":latitude" => $latitude,
 			":longitude" => $longitude,
-			":color" => $color
-		));
+			":color" => $color,
+			":user" => $user
+		]);
 		if($result)
 			echo $conn->lastInsertId();
 		else
 			echo $req->errorInfo();
 	}catch (Exception $e){
 		echo($e);
-	}
+	}	
 ?>
