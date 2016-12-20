@@ -3,6 +3,9 @@ package com.vitrine.vitrine;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.app.ProgressDialog;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.widget.Toast;
 
@@ -95,4 +98,6 @@ public class NetworkTools {
             urlConnection.disconnect();
         }
     }
+
+
 }
