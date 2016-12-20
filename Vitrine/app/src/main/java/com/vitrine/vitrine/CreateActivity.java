@@ -1,6 +1,7 @@
 package com.vitrine.vitrine;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Random;
@@ -60,8 +63,16 @@ public class CreateActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = ((EditText)findViewById(R.id.etName)).getText().toString();
-                new PostVitrineTask(CreateActivity.this, name, radius, hexColor).execute();
+                try {
+                    String name = ((EditText)findViewById(R.id.etName)).getText().toString();
+
+                    SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+                    User user = new User(settings.getString("userJson", null));
+
+                    new PostVitrineTask(CreateActivity.this, name, radius, hexColor, user.getName()).execute();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -122,20 +133,22 @@ public class CreateActivity extends AppCompatActivity {
         private final Activity activity;
         private final String name;
         private final String hexColor;
+        private final String userName;
         private final int radius;
 
-        public PostVitrineTask(Activity activity, String name, int radius, String hexColor) {
+        public PostVitrineTask(Activity activity, String name, int radius, String hexColor, String userName) {
             this.activity=activity;
             this.name=name;
             this.radius=radius;
             this.hexColor=hexColor;
+            this.userName=userName;
         }
 
         @Override
         protected String doInBackground(Void... voids) {
             String result = null;
             try {
-                return NetworkTools.postVitrine(name, radius, hexColor);
+                return NetworkTools.postVitrine(name, radius, hexColor, userName, CreateActivity.this);
             } catch (IOException e) {
                 e.printStackTrace();
                 return e.getMessage();

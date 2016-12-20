@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.vitrine.vitrine.ContributeActivity;
 import com.vitrine.vitrine.NetworkTools;
@@ -25,6 +26,7 @@ import com.vitrine.vitrine.TabActivity;
 import com.vitrine.vitrine.User;
 import com.vitrine.vitrine.Vitrine;
 import com.vitrine.vitrine.VitrineAdapter;
+import com.vitrine.vitrine.VitrineStore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +55,7 @@ public class ContributeFragment extends Fragment {
 
         mVitrineList = new ArrayList<>();
 
-        mContributeListView = (ListView) llLayout.findViewById(R.id.contribute_listview);
+        mContributeListView = (ListView) llLayout.findViewById(R.id.contributeListView);
         mProgressView = llLayout.findViewById(R.id.contribute_progress);
 
         Button btnNewVitrine = (Button) llLayout.findViewById(R.id.btnNewVitrine);
@@ -79,8 +81,10 @@ public class ContributeFragment extends Fragment {
             }
         });
 
+
         showProgress(true);
         retrieveVitrines();
+
 
         return llLayout;
     }
