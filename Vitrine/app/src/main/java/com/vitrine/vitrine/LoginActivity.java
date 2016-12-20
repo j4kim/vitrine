@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -15,6 +17,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 
@@ -26,16 +36,12 @@ import java.io.IOException;
 public class LoginActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "MyPrefsFile";
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private EditText mUsernameView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+
+    private final Context loginContext= this;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.username);
-
         mPasswordView = (EditText) findViewById(R.id.password);
 
         Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
@@ -53,10 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
+    /*
         //If user persistence exist, pass it to tabactivity and dont show login
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.contains("userJson"))
@@ -71,16 +73,13 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
+    */
     }
 
     /**
      * Attempts to sign in the account specified by the login form.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mUsernameView.setError(null);
@@ -110,111 +109,51 @@ public class LoginActivity extends AppCompatActivity {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(this, username, password);
-            mAuthTask.execute((Void) null);
         }
-    }
+        else {
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = getString(R.string.login_url) + "?username=" + username + "&password=" + password;
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                dialog.dismiss();
+                                User user = new User(response);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                                // User storage for no-login
+                                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString("userJson", user.toJson());
+
+                                // Commit the edits!
+                                editor.apply();
+
+                                Intent intent = new Intent(loginContext, TabActivity.class);
+                                intent.putExtra("user", user);
+                                startActivity(intent);
+
+                            } catch (JSONException e) {
+                                dialog.dismiss();
+                                mUsernameView.setError(getString(R.string.error_incorrect_credentials));
+                                mUsernameView.requestFocus();
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
                 @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                public void onErrorResponse(VolleyError error) {
+                    dialog.dismiss();
+                    Toast.makeText(loginContext, "Connection failed", Toast.LENGTH_LONG).show();
                 }
             });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUsername;
-        private final String mPassword;
-        private User user;
-        private final Activity activity;
-
-        UserLoginTask(Activity parent, String username, String password) {
-            activity = parent;
-            mUsername = username;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            //attempt authentication against a network service.
-            boolean userExist = false;
-            try {
-                String response = NetworkTools.connect(getString(R.string.login_url) +"?username="+ mUsername +"&password="+mPassword);
-                user = new User(response);
-                userExist = true;
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-
-            return userExist;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-
-                // User storage for no-login
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("userJson", user.toJson());
-
-                // Commit the edits!
-                editor.commit();
-
-                Intent intent = new Intent(activity, TabActivity.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
-            } else {
-                mUsernameView.setError(getString(R.string.error_incorrect_credentials));
-                mUsernameView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
+            dialog = ProgressDialog.show(this, "",
+                    "Loading. Please wait...", true);
         }
     }
 }

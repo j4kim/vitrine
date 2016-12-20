@@ -1,6 +1,8 @@
 package com.vitrine.vitrine;
 
+import android.app.ProgressDialog;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
@@ -92,4 +94,6 @@ public class NetworkTools {
             urlConnection.disconnect();
         }
     }
+
+
 }
