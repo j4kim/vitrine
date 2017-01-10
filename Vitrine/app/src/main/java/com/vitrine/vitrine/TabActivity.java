@@ -1,6 +1,5 @@
 package com.vitrine.vitrine;
 
-import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,8 +37,6 @@ import com.vitrine.vitrine.fragments.ContributeFragment;
 import com.vitrine.vitrine.fragments.DiscoverFragment;
 import com.vitrine.vitrine.fragments.SubscribedVitrinesFragment;
 
-import java.util.ArrayList;
-
 public class TabActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
@@ -48,6 +45,8 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+
+    public static LatLng LAST_KNOWN_LATLNG = null;
 
 
     /**
@@ -138,10 +137,10 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
         if (permission_location) {
             Log.i("TAB ACTIVITY", "permission accordée");
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if(mLastLocation!=null)
-                return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            else
-                return null;
+            if(mLastLocation!=null) {
+                return LAST_KNOWN_LATLNG = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            }
+            return null;
         }
         Log.i("TAB ACTIVITY", "permission refusée");
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 12);

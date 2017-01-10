@@ -1,10 +1,15 @@
 package com.vitrine.vitrine;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -16,7 +21,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -41,9 +45,9 @@ public class NetworkTools {
 
     }
 
-    public static String postVitrine(String name, int radius, String hexColor) throws IOException {
+    public static String postVitrine(String name, int radius, String hexColor, String userName, Context context) throws IOException {
 
-        URL url = new URL("http://j4kim.nexgate.ch/vitrine/postVitrine.php");
+        URL url = new URL(context.getResources().getString(R.string.post_vitrine_url));
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         try {
@@ -52,18 +56,18 @@ public class NetworkTools {
 
             OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
 
-            // TODO : récupérer la position actuelle et le pseudo de l'utilisateur (dans les préférences)
-            // TODO : côté serveur, abonner l'utilisateur à sa nouvelle vitrine
+            double lat = TabActivity.LAST_KNOWN_LATLNG.latitude;
+            double lon = TabActivity.LAST_KNOWN_LATLNG.longitude;
 
             // merci à http://stackoverflow.com/questions/9767952/how-to-add-parameters-to-httpurlconnection-using-post
             // Attention : doc de Uri.Builder : "Helper class for building or manipulating URI references. Not safe for concurrent use."
             Uri.Builder builder = new Uri.Builder()
                     .appendQueryParameter("name", name)
                     .appendQueryParameter("radius", radius+"")
-                    .appendQueryParameter("latitude", 46.997637+"")
-                    .appendQueryParameter("longitude", 6.938717+"")
+                    .appendQueryParameter("latitude", lat+"")
+                    .appendQueryParameter("longitude", lon+"")
                     .appendQueryParameter("hexColor", hexColor)
-                    .appendQueryParameter("user", "loris");
+                    .appendQueryParameter("user", userName);
             String query = builder.build().getEncodedQuery();
 
             OutputStream os = urlConnection.getOutputStream();

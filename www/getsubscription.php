@@ -4,13 +4,9 @@
 	$token = $_GET['token'];
 
 	$sql = "
-	SELECT vitrine.id, vitrine.name, vitrine.radius, vitrine.latitude, vitrine.longitude, vitrine.lastPostDate 
-	FROM vitrine
-		INNER JOIN subscribe 
-			ON subscribe.fk_vitrine_id = vitrine.id
-		INNER JOIN user 
-			ON user.id = subscribe.fk_user_id 
-	WHERE user.token LIKE '$token'";
+	SELECT vitrine.* 
+	FROM vitrine, subscribe, user 
+	WHERE subscribe.fk_vitrine_id = vitrine.id and user.id = subscribe.fk_user_id and user.token LIKE '$token'";
 
 	try
 	{
