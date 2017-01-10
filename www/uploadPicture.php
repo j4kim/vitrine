@@ -22,6 +22,3 @@
     else{
         echo "Error inserting picture in database";
     }
-    //$reponse->closeCursor();
-
-?>
