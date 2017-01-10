@@ -36,6 +36,7 @@ public class ContributeActivity extends AppCompatActivity {
     private Vitrine mVitrine;
     private static final int CAMERA_REQUEST = 1888;
     private String mCurrentPhotoPath;
+    private String imageFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class ContributeActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -110,6 +111,7 @@ public class ContributeActivity extends AppCompatActivity {
                             //Disimissing the progress dialog
                             loading.dismiss();
                             //Showing toast message of the response
+                            Log.i("upload_error", "onErrorResponse: " + s);
                             //Toast.makeText(MainActivity.this, s , Toast.LENGTH_LONG).show();
                         }
                     },
@@ -120,6 +122,7 @@ public class ContributeActivity extends AppCompatActivity {
                             loading.dismiss();
 
                             //Showing toast
+                            Log.i("upload_error", "onErrorResponse: " + volleyError.getMessage().toString());
                             //Toast.makeText(MainActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
                         }
                     }){
@@ -129,7 +132,8 @@ public class ContributeActivity extends AppCompatActivity {
                     String image = getStringImage(photo);
 
                     //Getting Image Name
-                    String name = mCurrentPhotoPath;
+                    String name = imageFileName;
+                    String vitrineId = String.valueOf(mVitrine.getId());
 
                     //Creating parameters
                     Map<String,String> params = new Hashtable<String, String>();
@@ -137,7 +141,7 @@ public class ContributeActivity extends AppCompatActivity {
                     //Adding parameters : 1st param is the name of the parameter $_POST["image"]
                     params.put("image", image);
                     params.put("name", name);
-                    params.put("vitrineId", String.valueOf(mVitrine.getId()));
+                    params.put("vitrineId", vitrineId);
 
                     //returning parameters
                     return params;
