@@ -95,12 +95,13 @@ public class ContributeActivity extends AppCompatActivity {
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            final Bitmap photo = BitmapFactory.decodeFile(mCurrentPhotoPath);
-
+            Bitmap bigPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            final Bitmap photo = bigPhoto.createScaledBitmap(bigPhoto, 1920, 1080, false);
             //From https://www.simplifiedcoding.net/android-volley-tutorial-to-upload-image-to-server/
             //Showing the progress dialog
             final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
@@ -113,6 +114,7 @@ public class ContributeActivity extends AppCompatActivity {
                             //Showing toast message of the response
                             Log.i("upload_error", "onErrorResponse: " + s);
                             //Toast.makeText(MainActivity.this, s , Toast.LENGTH_LONG).show();
+                            finish();
                         }
                     },
                     new Response.ErrorListener() {
