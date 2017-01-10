@@ -92,7 +92,7 @@ public class ContributeActivity extends AppCompatActivity {
 
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] imageBytes = baos.toByteArray();
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
@@ -101,7 +101,8 @@ public class ContributeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap bigPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            final Bitmap photo = bigPhoto.createScaledBitmap(bigPhoto, 1920, 1080, false);
+            double rapport = bigPhoto.getWidth()/bigPhoto.getHeight();
+            final Bitmap photo = bigPhoto.createScaledBitmap(bigPhoto, (int)(1080*rapport), 1080, false);
             //From https://www.simplifiedcoding.net/android-volley-tutorial-to-upload-image-to-server/
             //Showing the progress dialog
             final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
