@@ -1,6 +1,7 @@
 package com.vitrine.vitrine;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -159,6 +160,7 @@ public class CreateActivity extends AppCompatActivity {
         protected void onPostExecute(String str) {
             Toast.makeText(CreateActivity.this, str, Toast.LENGTH_SHORT).show();
             Log.i("HTTP RESULT",str);
+            activity.finish();
         }
     }
 }

@@ -20,7 +20,7 @@
 	}
 
 	echo ("{ \"vitrines\":[");
-	while ($donnees = $reponse->fetch())
+	while ($donnees = $reponse->fetch(PDO::FETCH_ASSOC))
 	{
 		//Create json object
 		echo (json_encode($donnees));
