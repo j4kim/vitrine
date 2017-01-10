@@ -11,6 +11,11 @@
 
     $response = $conn->query($sql);
     if($response){
+        if (!is_dir("uploads/$vitrineId/")) {
+            // dir doesn't exist, make it
+            mkdir("uploads/$vitrineId/");
+        }
+
     file_put_contents($path,base64_decode($image));
     echo "Successfully Uploaded";
     }
