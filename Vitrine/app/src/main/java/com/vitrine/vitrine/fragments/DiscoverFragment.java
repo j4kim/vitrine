@@ -1,6 +1,9 @@
 package com.vitrine.vitrine.fragments;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -16,6 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.vitrine.vitrine.NetworkTools;
 import com.vitrine.vitrine.R;
 import com.vitrine.vitrine.TabActivity;
+import com.vitrine.vitrine.User;
 import com.vitrine.vitrine.Vitrine;
 
 import org.json.JSONArray;
@@ -42,7 +52,7 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private HashMap<Circle, Vitrine> circlesVitrines;
     private Circle lastClickedCircle=null;
-    private RetrieveCloseTask mRetrieveCloseTask;
+    private ProgressDialog dialog;
 
 
     @Nullable
@@ -57,12 +67,82 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void retrieveVitrines(){
-        if (mRetrieveCloseTask != null) {
+        /*if (mRetrieveCloseTask != null) {
             return;
         }
 
         mRetrieveCloseTask = new RetrieveCloseTask(((TabActivity)getActivity()).getUser().getToken());
-        mRetrieveCloseTask.execute((Void) null);
+        mRetrieveCloseTask.execute((Void) null);*/
+
+        //---------------------------------------
+
+        final TabActivity activity = (TabActivity)getActivity();
+
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(activity);
+        String url = getString(R.string.subscription_url) + "?token=" + activity.getUser().getToken();
+
+        // Request a string response from the provided URL.
+        final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try
+                        {
+                            dialog.dismiss();
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray responses = jsonObject.getJSONArray("vitrines");
+                            for(int i = 0; i < responses.length()-1; i++)
+                            {
+                                String str = responses.getJSONObject(i).toString();
+                                final Vitrine v = new Vitrine(str);
+                                // Add picture path to vitrines
+                                RequestQueue queue1 = Volley.newRequestQueue(activity);
+                                String url = getString(R.string.getpictures_url)+"?vitrine_id="+v.getId();
+
+                                StringRequest stringRequest1 = new StringRequest(Request.Method.GET, url,
+                                        new Response.Listener<String>(){
+                                            @Override
+                                            public void onResponse(String response){
+                                                try {
+                                                    JSONObject pictureObject = new JSONObject(response);
+                                                    JSONArray pictureArray = pictureObject.getJSONArray("pictures");
+
+                                                    for(int i = 0; i < pictureArray.length() - 1; i ++){
+                                                        v.addPicture(pictureArray.getJSONObject(i).getString("path"));
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }, new Response.ErrorListener(){
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // Errors while retrieving picture
+                                    }
+                                });
+                                queue1.add(stringRequest1);
+
+                                mListVitrine.add(v);
+                            }
+
+                            loadMap();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialog.dismiss();
+                Toast.makeText(activity, "Connection failed", Toast.LENGTH_LONG).show();
+            }
+        });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+        dialog = ProgressDialog.show(activity, "",
+                "Loading. Please wait...", true);
 
     }
 
@@ -148,69 +228,5 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
         getChildFragmentManager().beginTransaction().replace(R.id.map, mapFragment).commit();
 
         mapFragment.getMapAsync(this);
-    }
-
-    /**
-     * Represents an asynchronous retrieving task for vitrines
-     */
-    public class RetrieveCloseTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUserToken;
-
-        RetrieveCloseTask(String userToken) {
-            mUserToken = userToken;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            //attempt retrieving a list of vitrines.
-            boolean success = false;
-            try {
-                String response = NetworkTools.connect(getString(R.string.subscription_url) + "?token=" + mUserToken);
-
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray responses = jsonObject.getJSONArray("vitrines");
-                for(int i = 0; i < responses.length()-1; i++)
-                {
-                    String str = responses.getJSONObject(i).toString();
-                    Vitrine v = new Vitrine(str);
-                    // Add picture path to vitrines
-                    try {
-                        String pictureList = NetworkTools.connect(getString(R.string.getpictures_url) + "?vitrine_id=" + v.getId());
-                        JSONObject pictureObject = new JSONObject(pictureList);
-                        JSONArray pictureArray = pictureObject.getJSONArray("pictures");
-                        for (int j = 0; j < pictureArray.length() - 1; j++) {
-                            v.addPicture(pictureArray.getJSONObject(i).getString("path"));
-                        }
-
-                        mListVitrine.add(v);
-                    } catch (IOException |JSONException e)
-                    {
-                        // Error while retrieving pictures
-                        e.printStackTrace();
-                    }
-                }
-                success = true;
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-
-            return success;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mRetrieveCloseTask = null;
-
-            loadMap();
-        }
-
-        @Override
-        protected void onCancelled() {
-            mRetrieveCloseTask = null;
-
-            loadMap();
-        }
     }
 }
