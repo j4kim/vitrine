@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
-    /*
+
         //If user persistence exist, pass it to tabactivity and dont show login
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.contains("userJson"))
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    */
+
     }
 
     /**
