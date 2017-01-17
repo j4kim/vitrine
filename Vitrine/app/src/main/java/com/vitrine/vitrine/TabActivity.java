@@ -21,6 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -45,7 +47,7 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-
+    private RequestQueue queue;
     public static LatLng LAST_KNOWN_LATLNG = null;
 
 
@@ -68,6 +70,8 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
+        queue = Volley.newRequestQueue(this);
 
         Intent i = getIntent();
         mUser = i.getParcelableExtra("user");
@@ -273,5 +277,9 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
      */
     public User getUser(){
         return mUser;
+    }
+
+    public RequestQueue getQueue(){
+        return  queue;
     }
 }

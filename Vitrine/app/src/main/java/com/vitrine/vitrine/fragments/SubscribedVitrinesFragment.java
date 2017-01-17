@@ -1,41 +1,39 @@
 package com.vitrine.vitrine.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.os.AsyncTask;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.vitrine.vitrine.NetworkTools;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.vitrine.vitrine.R;
 import com.vitrine.vitrine.TabActivity;
 import com.vitrine.vitrine.User;
 import com.vitrine.vitrine.Vitrine;
+import com.vitrine.vitrine.VitrineActivity;
 import com.vitrine.vitrine.VitrineAdapter;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SubscribedVitrinesFragment extends Fragment {
 
-    private RetrieveVitrineTask mRetrieveTask;
-
     // UI references
-    private View mProgressView;
     private ListView mSubscribedListView;
     private ArrayList<Vitrine> mVitrineList;
+    private VitrineAdapter mVitrineAdapter;
 
     private User user;
 
@@ -49,129 +47,55 @@ public class SubscribedVitrinesFragment extends Fragment {
         mVitrineList = new ArrayList<>();
 
         mSubscribedListView = (ListView) llLayout.findViewById(R.id.subscribed_listview);
-        mProgressView = llLayout.findViewById(R.id.subscribed_progress);
 
-        VitrineAdapter adapter = new VitrineAdapter(fa, mVitrineList);
-        mSubscribedListView.setAdapter(adapter);
+        mVitrineAdapter  = new VitrineAdapter(fa, mVitrineList);
+        mSubscribedListView.setAdapter(mVitrineAdapter);
 
-        showProgress(true);
-        retrieveVitrines();
+        mSubscribedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Intent intent = new Intent(getActivity(), VitrineActivity.class);
+                intent.putExtra("vitrine", mVitrineList.get(i));
+                startActivity(intent);
+            }
+        });
+
+        retrieveSubscribedVitrines();
 
         return llLayout;
     }
 
+    private void retrieveSubscribedVitrines(){
 
-    private void retrieveVitrines(){
-        if (mRetrieveTask != null) {
-            return;
-        }
+        String url = getString(R.string.subscription_url) + "?token=" + user.getToken();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray responses = jsonObject.getJSONArray("vitrines");
+                    for (int i = 0; i < responses.length(); i++) {
+                        String str = responses.getJSONObject(i).toString();
+                        Vitrine v = new Vitrine(str);
 
-        mRetrieveTask = new RetrieveVitrineTask(user.getToken());
-        mRetrieveTask.execute((Void) null);
-
-    }
-
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mSubscribedListView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mSubscribedListView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mSubscribedListView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mSubscribedListView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-    /**
-     * Represents an asynchronous retrieving task for vitrines
-     */
-    public class RetrieveVitrineTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUserToken;
-
-        RetrieveVitrineTask(String userToken) {
-            mUserToken = userToken;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            //attempt retrieving a list of vitrines.
-            boolean success = false;
-            try {
-                String response = NetworkTools.connect(getString(R.string.subscription_url) + "?token=" + mUserToken);
-
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray responses = jsonObject.getJSONArray("vitrines");
-                for(int i = 0; i < responses.length()-1; i++)
-                {
-                    String str = responses.getJSONObject(i).toString();
-                    Vitrine v = new Vitrine(str);
-                    // Add picture path to vitrines
-                    try {
-                        String pictureList = NetworkTools.connect(getString(R.string.getpictures_url) + "?vitrine_id=" + v.getId());
-                        JSONObject pictureObject = new JSONObject(pictureList);
-                        JSONArray pictureArray = pictureObject.getJSONArray("pictures");
-                        for (int j = 0; j < pictureArray.length() - 1; j++) {
-                            v.addPicture(pictureArray.getJSONObject(i).getString("path"));
-                        }
-
+                        // Add picture path to vitrines
                         mVitrineList.add(v);
-                    } catch (IOException |JSONException e)
-                    {
-                        // Error while retrieving pictures
-                        e.printStackTrace();
                     }
+
+                    mVitrineAdapter.notifyDataSetChanged();
                 }
-                success = true;
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
+                catch (Exception e)
+                {
+                }
             }
-            return success;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mRetrieveTask = null;
-            showProgress(false);
-
-            if (success) {
-                showProgress(false);
-            } else {
-                //Probleme lors de la reception des vitrines
-
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY_ERROR", error.getMessage());
             }
-        }
+        });
 
-        @Override
-        protected void onCancelled() {
-            mRetrieveTask = null;
-            showProgress(false);
-        }
+        ((TabActivity)getActivity()).getQueue().add(stringRequest);
     }
 }

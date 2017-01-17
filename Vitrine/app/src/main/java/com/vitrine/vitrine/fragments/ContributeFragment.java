@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.model.LatLng;
 import com.vitrine.vitrine.ContributeActivity;
 import com.vitrine.vitrine.NetworkTools;
 import com.vitrine.vitrine.CreateActivity;
@@ -36,12 +42,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ContributeFragment extends Fragment {
-
-    private RetrieveVitrineTask mRetrieveTask;
-
     // UI references
     private View mProgressView;
     private ListView mContributeListView;
+    private VitrineAdapter mVitrineAdapter;
     private ArrayList<Vitrine> mVitrineList;
 
     private User user;
@@ -60,8 +64,8 @@ public class ContributeFragment extends Fragment {
 
         Button btnNewVitrine = (Button) llLayout.findViewById(R.id.btnNewVitrine);
 
-        VitrineAdapter adapter = new VitrineAdapter(fa, mVitrineList);
-        mContributeListView.setAdapter(adapter);
+        mVitrineAdapter = new VitrineAdapter(fa, mVitrineList);
+        mContributeListView.setAdapter(mVitrineAdapter);
 
         mContributeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,7 +86,6 @@ public class ContributeFragment extends Fragment {
         });
 
 
-        showProgress(true);
         retrieveVitrines();
 
 
@@ -90,117 +93,41 @@ public class ContributeFragment extends Fragment {
     }
 
 
+
     private void retrieveVitrines(){
-        if (mRetrieveTask != null) {
-            return;
-        }
 
-        mRetrieveTask = new RetrieveVitrineTask(user.getToken());
-        mRetrieveTask.execute((Void) null);
+        LatLng latLng = TabActivity.LAST_KNOWN_LATLNG;
+        String lat = String.valueOf(latLng.latitude);
+        String lon = String.valueOf(latLng.longitude);
 
-    }
+        String url = getString(R.string.get_vitrines_here_url) + "?lat=" + lat + "&long=" + lon
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray responses = jsonObject.getJSONArray("vitrines");
+                    for (int i = 0; i < responses.length(); i++) {
+                        String str = responses.getJSONObject(i).toString();
+                        Vitrine v = new Vitrine(str);
 
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mContributeListView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mContributeListView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mContributeListView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mContributeListView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-    /**
-     * Represents an asynchronous retrieving task for vitrines
-     */
-    public class RetrieveVitrineTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUserToken;
-
-        RetrieveVitrineTask(String userToken) {
-            mUserToken = userToken;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            //attempt retrieving a list of vitrines.
-            boolean success = false;
-            try {
-                String response = NetworkTools.connect(getString(R.string.subscription_url) + "?token=" + mUserToken);
-
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray responses = jsonObject.getJSONArray("vitrines");
-                for(int i = 0; i < responses.length()-1; i++)
-                {
-                    String str = responses.getJSONObject(i).toString();
-                    Vitrine v = new Vitrine(str);
-                    // Add picture path to vitrines
-                    try {
-                        String pictureList = NetworkTools.connect(getString(R.string.getpictures_url) + "?vitrine_id=" + v.getId());
-                        JSONObject pictureObject = new JSONObject(pictureList);
-                        JSONArray pictureArray = pictureObject.getJSONArray("pictures");
-                        for (int j = 0; j < pictureArray.length() - 1; j++) {
-                            v.addPicture(pictureArray.getJSONObject(i).getString("path"));
-                        }
-
+                        // Add picture path to vitrines
                         mVitrineList.add(v);
-                    } catch (IOException |JSONException e)
-                    {
-                        // Error while retrieving pictures
-                        e.printStackTrace();
                     }
+
+                    mVitrineAdapter.notifyDataSetChanged();
                 }
-                success = true;
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
+                catch (Exception e)
+                {
+                }
             }
-            return success;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mRetrieveTask = null;
-            showProgress(false);
-
-            if (success) {
-                showProgress(false);
-            } else {
-                //Probleme lors de la reception des vitrines
-
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY_ERROR", error.getMessage());
             }
-        }
+        });
 
-        @Override
-        protected void onCancelled() {
-            mRetrieveTask = null;
-            showProgress(false);
-        }
+        ((TabActivity)getActivity()).getQueue().add(stringRequest);
     }
 }

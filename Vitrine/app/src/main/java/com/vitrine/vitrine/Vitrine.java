@@ -32,6 +32,7 @@ public class Vitrine implements Parcelable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.color = color;
+        this.pictures = new ArrayList<>();
     }
 
     public Vitrine(String jsonResponse) throws JSONException {

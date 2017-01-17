@@ -15,9 +15,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class CreateActivity extends AppCompatActivity {
@@ -65,12 +74,45 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    String name = ((EditText)findViewById(R.id.etName)).getText().toString();
+                    final String name = ((EditText)findViewById(R.id.etName)).getText().toString();
 
+                    //TODO pass the user in intent
                     SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-                    User user = new User(settings.getString("userJson", null));
+                    final User user = new User(settings.getString("userJson", null));
 
-                    new PostVitrineTask(CreateActivity.this, name, radius, hexColor, user.getName()).execute();
+                    // new PostVitrineTask(CreateActivity.this, name, radius, hexColor, user.getName()).execute();
+
+                    RequestQueue queue = Volley.newRequestQueue(CreateActivity.this);
+                    String url = getString(R.string.post_vitrine_url);
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(CreateActivity.this, response, Toast.LENGTH_LONG).show();
+                            CreateActivity.this.finish();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }){
+                        @Override
+                        protected Map<String,String> getParams(){
+                            Map<String,String> params = new HashMap<String, String>();
+                            params.put("name",name);
+                            params.put("radius", radius + "");
+                            params.put("latitude", TabActivity.LAST_KNOWN_LATLNG.latitude + "");
+                            params.put("longitude", TabActivity.LAST_KNOWN_LATLNG.longitude + "");
+                            params.put("hexColor", hexColor);
+                            params.put("user", user.getName());
+
+                            return params;
+                        }
+                    };
+
+                    queue.add(stringRequest);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -124,43 +166,5 @@ public class CreateActivity extends AppCompatActivity {
         b = ((SeekBar)findViewById(R.id.sbB)).getProgress();
         hexColor = String.format("#%02x%02x%02x", r, g, b);
         btnCreate.setBackgroundColor(Color.parseColor(hexColor));
-    }
-
-
-
-
-    public class PostVitrineTask extends AsyncTask<Void, Void, String>{
-
-        private final Activity activity;
-        private final String name;
-        private final String hexColor;
-        private final String userName;
-        private final int radius;
-
-        public PostVitrineTask(Activity activity, String name, int radius, String hexColor, String userName) {
-            this.activity=activity;
-            this.name=name;
-            this.radius=radius;
-            this.hexColor=hexColor;
-            this.userName=userName;
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            String result = null;
-            try {
-                return NetworkTools.postVitrine(name, radius, hexColor, userName, CreateActivity.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String str) {
-            Toast.makeText(CreateActivity.this, str, Toast.LENGTH_SHORT).show();
-            Log.i("HTTP RESULT",str);
-            activity.finish();
-        }
     }
 }

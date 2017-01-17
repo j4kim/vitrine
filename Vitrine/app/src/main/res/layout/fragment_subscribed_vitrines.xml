@@ -7,13 +7,6 @@
     tools:context="com.vitrine.vitrine.TabActivity"
     android:padding="16dp">
 
-    <!-- Subscribed progress -->
-
-    <ProgressBar
-        android:id="@+id/subscribed_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"/>
 
     <ListView
         android:id="@+id/subscribed_listview"

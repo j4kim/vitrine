@@ -54,7 +54,8 @@
             android:value="AIzaSyAMOxJsOppfTcLY02adba7UaSgCc_J4RCA" />
 
         <activity android:name=".ContributeActivity" />
-        <activity android:name=".CreateActivity"></activity>
+        <activity android:name=".CreateActivity" />
+        <activity android:name=".VitrineActivity"></activity>
     </application>
 
 </manifest>

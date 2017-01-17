@@ -102,6 +102,7 @@ public class ContributeActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap bigPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
             final Bitmap photo = bigPhoto.createScaledBitmap(bigPhoto, 1920, 1080, false);
+
             //From https://www.simplifiedcoding.net/android-volley-tutorial-to-upload-image-to-server/
             //Showing the progress dialog
             final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
