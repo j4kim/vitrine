@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.vitrine.vitrine.ContributeActivity;
 import com.vitrine.vitrine.NetworkTools;
 import com.vitrine.vitrine.CreateActivity;
@@ -153,7 +154,10 @@ public class ContributeFragment extends Fragment {
             //attempt retrieving a list of vitrines.
             boolean success = false;
             try {
-                String response = NetworkTools.connect(getString(R.string.subscription_url) + "?token=" + mUserToken);
+                LatLng latLng = TabActivity.LAST_KNOWN_LATLNG;
+                String lat = String.valueOf(latLng.latitude);
+                String lon = String.valueOf(latLng.longitude);
+                String response = NetworkTools.connect(getString(R.string.get_vitrines_here_url) + "?lat=" + lat + "&long=" + lon);
 
                 JSONObject jsonObject = new JSONObject(response);
                 JSONArray responses = jsonObject.getJSONArray("vitrines");
