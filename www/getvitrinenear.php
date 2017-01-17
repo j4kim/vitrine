@@ -1,5 +1,5 @@
 <?php
-	require_once('includes/db_login.php');
+	require_once('includes/tools.php');
 
 	$lat = $_GET['lat'];
 	$long = $_GET['long'];
@@ -10,22 +10,5 @@
 		LIMIT 0 , 20";
 	// ON PEUT AJOUTER HAVING distance < X (en km)
 		
-	try
-	{
-		$reponse = $conn->query($sql);
-	}
-	catch (PDOException $e)
-	{
-		print($e);
-	}
-
-	echo ("{ \"vitrines\":[");
-	while ($donnees = $reponse->fetch(PDO::FETCH_ASSOC))
-	{
-		//Create json object
-		echo (json_encode($donnees));
-		echo (",");
-	}
-	echo("]}");
-	$reponse->closeCursor();
+    echoVitrines($sql);
 ?>

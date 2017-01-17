@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,9 +160,10 @@ public class ContributeFragment extends Fragment {
                 String lon = String.valueOf(latLng.longitude);
                 String response = NetworkTools.connect(getString(R.string.get_vitrines_here_url) + "?lat=" + lat + "&long=" + lon);
 
+
                 JSONObject jsonObject = new JSONObject(response);
                 JSONArray responses = jsonObject.getJSONArray("vitrines");
-                for(int i = 0; i < responses.length()-1; i++)
+                for(int i = 0; i < responses.length(); i++)
                 {
                     String str = responses.getJSONObject(i).toString();
                     Vitrine v = new Vitrine(str);
@@ -181,6 +183,7 @@ public class ContributeFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                Log.i("Vitrines list contrib", String.valueOf(mVitrineList));
                 success = true;
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
