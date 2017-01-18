@@ -1,11 +1,6 @@
 package com.vitrine.vitrine.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,20 +19,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.vitrine.vitrine.ContributeActivity;
-import com.vitrine.vitrine.NetworkTools;
 import com.vitrine.vitrine.CreateActivity;
 import com.vitrine.vitrine.R;
 import com.vitrine.vitrine.TabActivity;
 import com.vitrine.vitrine.User;
 import com.vitrine.vitrine.Vitrine;
 import com.vitrine.vitrine.VitrineAdapter;
-import com.vitrine.vitrine.VitrineStore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ContributeFragment extends Fragment {
@@ -100,7 +91,7 @@ public class ContributeFragment extends Fragment {
         String lat = String.valueOf(latLng.latitude);
         String lon = String.valueOf(latLng.longitude);
 
-        String url = getString(R.string.get_vitrines_here_url) + "?lat=" + lat + "&long=" + lon
+        String url = getString(R.string.get_vitrines_here_url) + "?lat=" + lat + "&long=" + lon;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -117,8 +108,9 @@ public class ContributeFragment extends Fragment {
 
                     mVitrineAdapter.notifyDataSetChanged();
                 }
-                catch (Exception e)
+                catch (JSONException e)
                 {
+                    e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {

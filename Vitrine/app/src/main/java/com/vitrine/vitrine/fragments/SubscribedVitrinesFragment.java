@@ -24,6 +24,7 @@ import com.vitrine.vitrine.VitrineActivity;
 import com.vitrine.vitrine.VitrineAdapter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -85,9 +86,10 @@ public class SubscribedVitrinesFragment extends Fragment {
 
                     mVitrineAdapter.notifyDataSetChanged();
                 }
-                catch (Exception e)
-                {
+                catch (JSONException e){
+                    e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override

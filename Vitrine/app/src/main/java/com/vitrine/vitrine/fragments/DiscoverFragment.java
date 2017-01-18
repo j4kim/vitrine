@@ -93,7 +93,7 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
                             dialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray responses = jsonObject.getJSONArray("vitrines");
-                            for(int i = 0; i < responses.length()-1; i++)
+                            for(int i = 0; i < responses.length(); i++)
                             {
                                 String str = responses.getJSONObject(i).toString();
                                 final Vitrine v = new Vitrine(str);

@@ -1,5 +1,5 @@
 <?php
-	require_once('includes/db_login.php');
+	require_once('includes/tools.php');
 
 	$lat = $_GET['lat'];
 	$long = $_GET['long'];
@@ -9,22 +9,6 @@
 		HAVING distance < radius/1000
 		ORDER BY distance
 		LIMIT 0 , 20";
-		
-	try
-	{
-		$reponse = $conn->query($sql);
-	}
-	catch (PDOException $e)
-	{
-		print($e);
-	}
-	echo ("{ \"vitrines\":[");
-	while ($donnees = $reponse->fetch(PDO::FETCH_ASSOC))
-	{
-		//Create json object
-		echo (json_encode($donnees));
-		echo (",");
-	}
-	echo ("]}");
-	$reponse->closeCursor();
+    
+    echoVitrines($sql);
 ?>

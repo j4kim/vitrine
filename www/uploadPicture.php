@@ -5,7 +5,7 @@
     $name = $_POST['name'];
     $vitrine_id = $_POST['vitrineId'];
 
-    $path = "uploads/$vitrine_id/$name.png";
+    $path = "uploads/$vitrine_id/$name.jpg";
 
     $sql = "INSERT INTO picture (path) VALUES ('$path')";
 
@@ -16,10 +16,9 @@
             mkdir("uploads/$vitrine_id/");
         }
 
-    file_put_contents($path,base64_decode($image));
+    file_put_contents($path,base64_decode($image, true));
     echo "Successfully Uploaded";
     }
     else{
         echo "Error inserting picture in database";
     }
-?>
