@@ -87,8 +87,7 @@ public class Vitrine implements Parcelable {
     public String getPictureAtIndex(int index)
     {
         try {
-            if (index > pictures.size())
-                index = index % pictures.size();
+            index = index % pictures.size();
             return pictures.get(index);
         }
         catch (ArithmeticException e)

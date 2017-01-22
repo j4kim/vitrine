@@ -122,7 +122,8 @@ public class ContributeActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String s) {
                             //Disimissing the progress dialog
-                            loading.dismiss();
+                            if(loading.isShowing())
+                                loading.dismiss();
                             //Showing toast message of the response
                             Log.i("upload_error", "onErrorResponse: " + s);
                             Toast.makeText(ContributeActivity.this, s, Toast.LENGTH_LONG).show();
