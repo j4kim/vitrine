@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
+import static com.google.android.gms.analytics.internal.zzy.w;
+
 public class ContributeActivity extends AppCompatActivity {
 
     private Vitrine mVitrine;
@@ -101,7 +103,9 @@ public class ContributeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap bigPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            double rapport = bigPhoto.getWidth()/bigPhoto.getHeight();
+            int w =  bigPhoto.getWidth();
+            int h = bigPhoto.getHeight();
+            double rapport = w/(double)h;
             final Bitmap photo = bigPhoto.createScaledBitmap(bigPhoto, (int)(1080*rapport), 1080, false);
             //From https://www.simplifiedcoding.net/android-volley-tutorial-to-upload-image-to-server/
             //Showing the progress dialog
