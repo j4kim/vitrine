@@ -144,7 +144,10 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
             if(mLastLocation!=null) {
                 return LAST_KNOWN_LATLNG = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             }
-            return null;
+            //TODO DEBUG STUFF mLastlocation est tjr null chez moi
+            return LAST_KNOWN_LATLNG = new LatLng(46.997649, 6.938834);
+
+            //return null;
         }
         Log.i("TAB ACTIVITY", "permission refusée");
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 12);

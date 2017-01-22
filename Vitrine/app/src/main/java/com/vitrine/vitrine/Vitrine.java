@@ -82,7 +82,20 @@ public class Vitrine implements Parcelable {
 
     public int getColor() { return color; }
 
+    public ArrayList<String> getPictures() { return pictures; }
 
+    public String getPictureAtIndex(int index)
+    {
+        try {
+            if (index > pictures.size())
+                index = index % pictures.size();
+            return pictures.get(index);
+        }
+        catch (ArithmeticException e)
+        {
+            return "";
+        }
+    }
 
     /*
      *  Parcelable implementation

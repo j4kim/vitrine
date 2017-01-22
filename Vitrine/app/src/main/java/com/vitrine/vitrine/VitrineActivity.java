@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -29,7 +30,9 @@ public class VitrineActivity extends AppCompatActivity {
     private final Context vitrineContext = this;
 
     private ImageView mImageView;
+    private RequestQueue queue;
 
+    private int imgIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +40,14 @@ public class VitrineActivity extends AppCompatActivity {
 
         mImageView = (ImageView) findViewById(R.id.imageView);
 
+        imgIndex = 0;
+
         Intent i = getIntent();
         mVitrine = i.getParcelableExtra("vitrine");
 
 
         // Load the picture list
-        RequestQueue queue = Volley.newRequestQueue(this);
+        queue = Volley.newRequestQueue(this);
         String url =  getString(R.string.getpictures_url) + "?vitrine_id=" + mVitrine.getId();
 
 
@@ -51,13 +56,15 @@ public class VitrineActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    dialog.dismiss();
 
                     JSONObject pictureObject = new JSONObject(response);
                     JSONArray pictureArray = pictureObject.getJSONArray("pictures");
                     for (int j = 0; j < pictureArray.length() - 1; j++) {
                         mVitrine.addPicture(pictureArray.getJSONObject(j).getString("path"));
                     }
+
+                    load_img();
+                    dialog.dismiss();
 
                 } catch (JSONException e) {
                     dialog.dismiss();
@@ -75,7 +82,28 @@ public class VitrineActivity extends AppCompatActivity {
         queue.add(stringRequest);
         dialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
 
-        String imgUrl = "http://j4kim.nexgate.ch/vitrine/uploads/12/JPEG_20170117_100229_.jpg";
+
+
+        // Click listener to go to next img
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgIndex++;
+                load_img();
+            }
+        });
+
+
+    }
+
+
+    private void load_img()
+    {
+
+        if(mVitrine.getPictures().size() == 0)
+            return;
+
+        String imgUrl = getString(R.string.get_vitrine_image_url) + mVitrine.getPictureAtIndex(imgIndex);
 
         ImageRequest request = new ImageRequest(imgUrl,
                 new Response.Listener<Bitmap>() {
@@ -86,14 +114,11 @@ public class VitrineActivity extends AppCompatActivity {
                 }, 0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
-                       // mImageView.setImageResource(R.drawable.image_load_error);
+                        // mImageView.setImageResource(R.drawable.image_load_error);
                     }
                 });
 
         queue.add(request);
     }
-
-
-
 
 }

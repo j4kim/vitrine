@@ -87,7 +87,7 @@ public class ContributeFragment extends Fragment {
 
     private void retrieveVitrines(){
 
-        LatLng latLng = TabActivity.LAST_KNOWN_LATLNG;
+        LatLng latLng = ((TabActivity)getActivity()).getLocation();
         String lat = String.valueOf(latLng.latitude);
         String lon = String.valueOf(latLng.longitude);
 
