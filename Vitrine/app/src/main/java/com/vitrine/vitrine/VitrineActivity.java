@@ -50,7 +50,7 @@ public class VitrineActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         String url =  getString(R.string.getpictures_url) + "?vitrine_id=" + mVitrine.getId();
 
-
+        setTitle(mVitrine.getName());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
