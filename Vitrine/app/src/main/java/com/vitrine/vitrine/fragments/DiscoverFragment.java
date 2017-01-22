@@ -138,7 +138,7 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(46.996914,6.93576),15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(((TabActivity)getActivity()).getLocation(),15));
 
 
         if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
