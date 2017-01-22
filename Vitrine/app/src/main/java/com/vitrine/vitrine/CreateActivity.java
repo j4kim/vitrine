@@ -31,9 +31,6 @@ import java.util.Random;
 
 public class CreateActivity extends AppCompatActivity {
 
-    private int r;
-    private int g;
-    private int b;
     private int radius;
     private Button btnCreate;
     private String hexColor;
@@ -155,15 +152,21 @@ public class CreateActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * update the raduis text to the slider value
+     */
     private void updateRadius() {
         radius = sbRadius.getProgress()+10;
         tvRadius.setText("radius : "+radius+" m");
     }
 
+    /**
+     * Update the color of the button to the slider values
+     */
     private void updateColor() {
-        r = ((SeekBar)findViewById(R.id.sbR)).getProgress();
-        g = ((SeekBar)findViewById(R.id.sbG)).getProgress();
-        b = ((SeekBar)findViewById(R.id.sbB)).getProgress();
+        int r = ((SeekBar) findViewById(R.id.sbR)).getProgress();
+        int g = ((SeekBar) findViewById(R.id.sbG)).getProgress();
+        int b = ((SeekBar) findViewById(R.id.sbB)).getProgress();
         hexColor = String.format("#%02x%02x%02x", r, g, b);
         btnCreate.setBackgroundColor(Color.parseColor(hexColor));
     }

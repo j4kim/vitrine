@@ -54,6 +54,9 @@ public class ContributeActivity extends AppCompatActivity {
         startCameraActivity();
     }
 
+    /**
+     * Launch the camera activty
+     */
     private void startCameraActivity(){
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -78,33 +81,19 @@ public class ContributeActivity extends AppCompatActivity {
         }
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-        byte[] imageBytes = baos.toByteArray();
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-    }
-
+    /**
+     * Camera activity result
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap bigPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath);
+
+            /*
+             * Scale the photo
+             */
             int w =  bigPhoto.getWidth();
             int h = bigPhoto.getHeight();
             double rapport = w/(double)h;
@@ -124,9 +113,6 @@ public class ContributeActivity extends AppCompatActivity {
                             //Disimissing the progress dialog
                             if(loading.isShowing())
                                 loading.dismiss();
-                            //Showing toast message of the response
-                            Log.i("upload_error", "onErrorResponse: " + s);
-                            Toast.makeText(ContributeActivity.this, s, Toast.LENGTH_LONG).show();
                             finish();
                         }
                     },
@@ -136,9 +122,7 @@ public class ContributeActivity extends AppCompatActivity {
                             //Dismissing the progress dialog
                             loading.dismiss();
 
-                            //Showing toast
                             Log.i("upload_error", "onErrorResponse: " + volleyError.getMessage().toString());
-                            //Toast.makeText(MainActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
                         }
                     }){
                 @Override
@@ -169,5 +153,35 @@ public class ContributeActivity extends AppCompatActivity {
             //Adding request to the queue
             requestQueue.add(stringRequest);
         }
+    }
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    /**
+     * Convert an image to String (Base64)
+     * @param bmp image to convert
+     * @return String of the image converted in Base64
+     */
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
     }
 }

@@ -1,5 +1,6 @@
 package com.vitrine.vitrine.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 
 public class ContributeFragment extends Fragment {
     // UI references
-    private View mProgressView;
+    private ProgressDialog dialog;
     private ListView mContributeListView;
     private VitrineAdapter mVitrineAdapter;
     private ArrayList<Vitrine> mVitrineList;
@@ -51,8 +52,6 @@ public class ContributeFragment extends Fragment {
         mVitrineList = new ArrayList<>();
 
         mContributeListView = (ListView) llLayout.findViewById(R.id.contributeListView);
-        mProgressView = llLayout.findViewById(R.id.contribute_progress);
-        mProgressView.setVisibility(View.VISIBLE);
 
         Button btnNewVitrine = (Button) llLayout.findViewById(R.id.btnNewVitrine);
 
@@ -77,7 +76,8 @@ public class ContributeFragment extends Fragment {
             }
         });
 
-
+        dialog = ProgressDialog.show(fa, "",
+                "Loading. Please wait...", true);
         retrieveVitrines();
 
 
@@ -106,7 +106,7 @@ public class ContributeFragment extends Fragment {
                         // Add picture path to vitrines
                         mVitrineList.add(v);
                     }
-                    mProgressView.setVisibility(View.GONE);
+                    dialog.dismiss();
                     mVitrineAdapter.notifyDataSetChanged();
                 }
                 catch (JSONException e)

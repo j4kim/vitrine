@@ -114,7 +114,6 @@ public class VitrineActivity extends AppCompatActivity {
                 }, 0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
-                        // mImageView.setImageResource(R.drawable.image_load_error);
                     }
                 });
 

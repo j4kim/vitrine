@@ -1,5 +1,6 @@
 package com.vitrine.vitrine.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,9 +34,10 @@ public class SubscribedVitrinesFragment extends Fragment {
 
     // UI references
     private ListView mSubscribedListView;
+
     private ArrayList<Vitrine> mVitrineList;
     private VitrineAdapter mVitrineAdapter;
-    private View mProgressView;
+    private ProgressDialog dialog;
 
     private User user;
 
@@ -49,12 +51,11 @@ public class SubscribedVitrinesFragment extends Fragment {
         mVitrineList = new ArrayList<>();
 
         mSubscribedListView = (ListView) llLayout.findViewById(R.id.subscribed_listview);
-        mProgressView = llLayout.findViewById(R.id.subs_progress);
-        mProgressView.setVisibility(View.VISIBLE);
 
         mVitrineAdapter  = new VitrineAdapter(fa, mVitrineList);
         mSubscribedListView.setAdapter(mVitrineAdapter);
 
+        //Start vitrineActivity on click on item
         mSubscribedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -65,6 +66,10 @@ public class SubscribedVitrinesFragment extends Fragment {
             }
         });
 
+
+
+        dialog = ProgressDialog.show(fa, "",
+                "Loading. Please wait...", true);
         retrieveSubscribedVitrines();
 
         return llLayout;
@@ -83,10 +88,9 @@ public class SubscribedVitrinesFragment extends Fragment {
                         String str = responses.getJSONObject(i).toString();
                         Vitrine v = new Vitrine(str);
 
-                        // Add picture path to vitrines
                         mVitrineList.add(v);
                     }
-                    mProgressView.setVisibility(View.GONE);
+                    dialog.dismiss();
                     mVitrineAdapter.notifyDataSetChanged();
                 }
                 catch (JSONException e){

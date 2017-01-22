@@ -158,7 +158,6 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
         if (getLocation() == null)
             throw new AssertionError("No location available");
 
-//        Toast.makeText(this, getLocationString(), Toast.LENGTH_LONG).show();
 
         queue = Volley.newRequestQueue(this);
 
@@ -195,13 +194,6 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
         return null;
     }
 
-    private String getLocationString() {
-        LatLng latlng = getLocation();
-        if(latlng!=null)
-            return latlng.toString();
-        else
-            return "location disabled";
-    }
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -274,11 +266,11 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Subs";
+                    return getString(R.string.subs_title);
                 case 1:
-                    return "Contrib";
+                    return getString(R.string.contrib_title);
                 case 2:
-                    return "Explore";
+                    return getString(R.string.explore_title);
             }
             return null;
         }

@@ -3,10 +3,8 @@ package com.vitrine.vitrine.fragments;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -32,17 +30,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.vitrine.vitrine.NetworkTools;
 import com.vitrine.vitrine.R;
 import com.vitrine.vitrine.TabActivity;
-import com.vitrine.vitrine.User;
 import com.vitrine.vitrine.Vitrine;
+import com.vitrine.vitrine.VitrineActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -67,14 +63,6 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void retrieveVitrines(){
-        /*if (mRetrieveCloseTask != null) {
-            return;
-        }
-
-        mRetrieveCloseTask = new RetrieveCloseTask(((TabActivity)getActivity()).getUser().getToken());
-        mRetrieveCloseTask.execute((Void) null);*/
-
-        //---------------------------------------
 
         final TabActivity activity = (TabActivity)getActivity();
 
@@ -174,7 +162,7 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
             @Override
             public void onCircleClick(Circle circle) {
-                Vitrine vitrine = circlesVitrines.get(circle);
+                final Vitrine vitrine = circlesVitrines.get(circle);
 
                 if(circle.equals(lastClickedCircle)){
                     circle.setZIndex(circle.getZIndex()-1);
@@ -195,7 +183,9 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
                             .setAction("Voir", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent = new Intent(getActivity(), VitrineActivity.class);
+                                    intent.putExtra("vitrine", vitrine);
+                                    startActivity(intent);
                                 }
                             });
                     snackbar.show();

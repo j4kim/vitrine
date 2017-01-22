@@ -15,6 +15,11 @@ public class User implements Parcelable{
     private String email;
     private String token;
 
+    /**
+     * Standard constructor
+     * @param jsonResponse JSON string to decode
+     * @throws JSONException
+     */
     public User(String jsonResponse) throws JSONException {
         JSONObject mainObject = new JSONObject(jsonResponse);
         name = mainObject.getString("username");
@@ -22,12 +27,19 @@ public class User implements Parcelable{
         token = mainObject.getString("token");
     }
 
+    /**
+     * Constructor from a Parcel (unserialize constructor)
+     * @param in Parcel to create user from
+     */
     protected User(Parcel in) {
         name = in.readString();
         email = in.readString();
         token = in.readString();
     }
 
+    /**
+     * Parcelable method
+     */
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
@@ -39,14 +51,6 @@ public class User implements Parcelable{
             return new User[size];
         }
     };
-
-    public String getName() {
-        return name;
-    }
-
-    public String getToken() {
-        return token;
-    }
 
     @Override
     public int describeContents() {
@@ -60,8 +64,19 @@ public class User implements Parcelable{
         parcel.writeString(token);
     }
 
+    // Convert the user to a json string used for preferences
     public String toJson(){
-        // {"username":"loris","email":"loris@loris.com","token":"asdfasdfasdfasdfhasdfjhsaidfhinsofdnsiodofnaosdfinoasdifn"}
         return "{\"username\":\""+name+"\",\"email\":\""+email+"\",\"token\":\""+token+"\"}";
+    }
+
+    /*
+     * GETTERS
+     */
+    public String getName() {
+        return name;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

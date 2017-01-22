@@ -3,7 +3,6 @@ package com.vitrine.vitrine;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -26,8 +25,16 @@ public class Vitrine implements Parcelable {
     private ArrayList<String> pictures;
     private int color;
 
-    public Vitrine(String nom, int radius, double latitude, double longitude, int color){
-        this.name = nom;
+    /**
+     * Standard constructor
+     * @param name name
+     * @param radius radius
+     * @param latitude latitude
+     * @param longitude longitude
+     * @param color color
+     */
+    public Vitrine(String name, int radius, double latitude, double longitude, int color){
+        this.name = name;
         this.radius = radius;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -35,6 +42,11 @@ public class Vitrine implements Parcelable {
         this.pictures = new ArrayList<>();
     }
 
+    /**
+     * Constructor from JSON String
+     * @param jsonResponse JSON String
+     * @throws JSONException
+     */
     public Vitrine(String jsonResponse) throws JSONException {
         JSONObject mainObject = new JSONObject(jsonResponse);
         id = mainObject.getInt("id");
@@ -42,19 +54,22 @@ public class Vitrine implements Parcelable {
         radius = mainObject.getDouble("radius");
         latitude = mainObject.getDouble("latitude");
         longitude = mainObject.getDouble("longitude");
-        Log.i("JSON RESPONSE",jsonResponse);
         try{
             color = Color.parseColor(mainObject.getString("color"));
         }catch (IllegalArgumentException e){
             color = Color.BLUE;
         }
         pictures = new ArrayList<>();
-        Log.i("VITRINE", "lat = " + latitude + " / Long = " + longitude + " / radius = " + radius);
 
     }
 
     /*
      * Functions
+     */
+
+    /**
+     * Add a path to the pictures array
+     * @param path path of the picture
      */
     public void addPicture(String path)
     {

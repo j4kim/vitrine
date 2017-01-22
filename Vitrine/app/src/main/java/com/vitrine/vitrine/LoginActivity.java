@@ -23,7 +23,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
  */
 public class LoginActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "MyPrefsFile";
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //If user persistence exist, pass it to tabactivity and dont show login
+        //If user persistence exist, pass it to tabActivity and don't show login
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.contains("userJson"))
         {

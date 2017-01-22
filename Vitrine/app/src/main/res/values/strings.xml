@@ -10,7 +10,7 @@
     <string name="get_vitrines_here_url">http://j4kim.nexgate.ch/vitrine/getvitrinehere.php</string>
     <string name="get_vitrine_image_url">http://j4kim.nexgate.ch/vitrine/</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to LoginActivity -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -21,4 +21,9 @@
     <string name="title_activity_tab">TabActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- Strings related to TabActivity -->
+    <string name="subs_title">Subscribed</string>
+    <string name="contrib_title">Contribute</string>
+    <string name="explore_title">Explore</string>
 </resources>
