@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -106,7 +108,12 @@ public class ContributeActivity extends AppCompatActivity {
             int w =  bigPhoto.getWidth();
             int h = bigPhoto.getHeight();
             double rapport = w/(double)h;
-            final Bitmap photo = bigPhoto.createScaledBitmap(bigPhoto, (int)(1080*rapport), 1080, false);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bigPhoto, (int)(1080*rapport), 1080, false);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(-90);
+            // Rotate photo, thanks to http://stackoverflow.com/a/14645289
+            final Bitmap photo = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+
             //From https://www.simplifiedcoding.net/android-volley-tutorial-to-upload-image-to-server/
             //Showing the progress dialog
             final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
