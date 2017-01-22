@@ -158,7 +158,7 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
         if (getLocation() == null)
             throw new AssertionError("No location available");
 
-        Toast.makeText(this, getLocationString(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, getLocationString(), Toast.LENGTH_LONG).show();
 
         queue = Volley.newRequestQueue(this);
 

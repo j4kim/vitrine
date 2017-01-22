@@ -114,7 +114,7 @@ public class ContributeActivity extends AppCompatActivity {
                             loading.dismiss();
                             //Showing toast message of the response
                             Log.i("upload_error", "onErrorResponse: " + s);
-                            //Toast.makeText(MainActivity.this, s , Toast.LENGTH_LONG).show();
+                            Toast.makeText(ContributeActivity.this, s, Toast.LENGTH_LONG).show();
                             finish();
                         }
                     },
