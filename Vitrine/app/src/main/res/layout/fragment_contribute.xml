@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
-        android:text="Vitrines you can contribute to :"
-        android:textSize="24sp" />
+        android:text="Vitrines you can contribute to"
+        android:textSize="18sp"
+        android:textStyle="normal|bold" />
 
     <ProgressBar
         android:id="@+id/contribute_progress"

@@ -52,6 +52,7 @@ public class ContributeFragment extends Fragment {
 
         mContributeListView = (ListView) llLayout.findViewById(R.id.contributeListView);
         mProgressView = llLayout.findViewById(R.id.contribute_progress);
+        mProgressView.setVisibility(View.VISIBLE);
 
         Button btnNewVitrine = (Button) llLayout.findViewById(R.id.btnNewVitrine);
 
@@ -105,7 +106,7 @@ public class ContributeFragment extends Fragment {
                         // Add picture path to vitrines
                         mVitrineList.add(v);
                     }
-
+                    mProgressView.setVisibility(View.GONE);
                     mVitrineAdapter.notifyDataSetChanged();
                 }
                 catch (JSONException e)

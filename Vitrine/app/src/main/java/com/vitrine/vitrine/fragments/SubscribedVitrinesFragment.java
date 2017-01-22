@@ -35,6 +35,7 @@ public class SubscribedVitrinesFragment extends Fragment {
     private ListView mSubscribedListView;
     private ArrayList<Vitrine> mVitrineList;
     private VitrineAdapter mVitrineAdapter;
+    private View mProgressView;
 
     private User user;
 
@@ -48,6 +49,8 @@ public class SubscribedVitrinesFragment extends Fragment {
         mVitrineList = new ArrayList<>();
 
         mSubscribedListView = (ListView) llLayout.findViewById(R.id.subscribed_listview);
+        mProgressView = llLayout.findViewById(R.id.subs_progress);
+        mProgressView.setVisibility(View.VISIBLE);
 
         mVitrineAdapter  = new VitrineAdapter(fa, mVitrineList);
         mSubscribedListView.setAdapter(mVitrineAdapter);
@@ -83,7 +86,7 @@ public class SubscribedVitrinesFragment extends Fragment {
                         // Add picture path to vitrines
                         mVitrineList.add(v);
                     }
-
+                    mProgressView.setVisibility(View.GONE);
                     mVitrineAdapter.notifyDataSetChanged();
                 }
                 catch (JSONException e){

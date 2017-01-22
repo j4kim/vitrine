@@ -1,17 +1,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.vitrine.vitrine.TabActivity"
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent"
     android:padding="16dp">
 
 
-    <ListView
-        android:id="@+id/subscribed_listview"
+    <TextView
+        android:text="Your subscribed Vitrines"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:textSize="18sp"
+        android:textStyle="normal|bold" />
+
+    <ProgressBar
+        android:id="@+id/subs_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/subscribed_listview"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp" />
 
 
 </LinearLayout>
