@@ -10,6 +10,9 @@
     <string name="get_vitrines_here_url">http://j4kim.nexgate.ch/vitrine/getvitrinehere.php</string>
     <string name="get_vitrine_image_url">http://j4kim.nexgate.ch/vitrine/</string>
     <string name="all_vitrines_url">http://j4kim.nexgate.ch/vitrine/getallvitrines.php</string>
+    <string name="is_subscribed">http://j4kim.nexgate.ch/vitrine/isSubscribed.php</string>
+    <string name="subscribe">http://j4kim.nexgate.ch/vitrine/subscribe.php</string>
+    <string name="unsubscribe">http://j4kim.nexgate.ch/vitrine/unsubscribe.php</string>
 
     <!-- Strings related to LoginActivity -->
     <string name="prompt_username">Username</string>

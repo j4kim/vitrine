@@ -47,7 +47,6 @@ public class VitrineActivity extends AppCompatActivity {
         final Intent i = getIntent();
         mVitrine = i.getParcelableExtra("vitrine");
 
-
         // Load the picture list
         queue = Volley.newRequestQueue(this);
         String url =  getString(R.string.getpictures_url) + "?vitrine_id=" + mVitrine.getId();
@@ -66,7 +65,7 @@ public class VitrineActivity extends AppCompatActivity {
                         Toast.makeText(vitrineContext, "No pictures in this Vitrine", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    
+
                     for (int j = 0; j < pictureArray.length(); j++) {
                         mVitrine.addPicture(pictureArray.getJSONObject(j).getString("path"));
                     }
@@ -100,8 +99,6 @@ public class VitrineActivity extends AppCompatActivity {
                 load_img();
             }
         });
-
-
     }
 
 

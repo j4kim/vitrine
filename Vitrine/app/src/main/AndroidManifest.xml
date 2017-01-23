@@ -61,6 +61,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".VitrineActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".VitrineInfoActivity" />
     </application>
 
 </manifest>
