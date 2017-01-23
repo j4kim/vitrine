@@ -2,10 +2,14 @@ package com.vitrine.vitrine;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -98,10 +102,7 @@ public class ContributeActivity extends AppCompatActivity {
             int h = bigPhoto.getHeight();
             double rapport = w/(double)h;
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bigPhoto, (int)(1080*rapport), 1080, false);
-            Matrix matrix = new Matrix();
-            matrix.postRotate(-90);
-            // Rotate photo, thanks to http://stackoverflow.com/a/14645289
-            final Bitmap photo = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+            final Bitmap photo = rotateImageIfRequired(mCurrentPhotoPath, scaledBitmap);
 
             //From https://www.simplifiedcoding.net/android-volley-tutorial-to-upload-image-to-server/
             //Showing the progress dialog
@@ -179,9 +180,53 @@ public class ContributeActivity extends AppCompatActivity {
      */
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] imageBytes = baos.toByteArray();
         return Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
+    }
+
+
+    /**
+     * Thanks a lot to this answer : http://stackoverflow.com/a/14066265
+     */
+    private static Bitmap rotateImageIfRequired(String photoPath, Bitmap original) {
+        ExifInterface ei = null;
+        try {
+            ei = new ExifInterface(photoPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        Bitmap rotated;
+        switch(orientation) {
+
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotated = rotateImage(original, 90);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotated = rotateImage(original, 180);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotated = rotateImage(original, 270);
+                break;
+
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                return original;
+        }
+        return rotated;
+
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
     }
 }
