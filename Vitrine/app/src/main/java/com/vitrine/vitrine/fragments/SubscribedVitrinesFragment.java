@@ -44,6 +44,7 @@ public class SubscribedVitrinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentActivity fa = super.getActivity();
+
         LinearLayout llLayout = (LinearLayout) inflater.inflate(R.layout.fragment_subscribed_vitrines, container, false);
 
         user = ((TabActivity)getActivity()).getUser();

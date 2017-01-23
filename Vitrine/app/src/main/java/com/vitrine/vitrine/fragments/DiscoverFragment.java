@@ -54,7 +54,6 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         mListVitrine = new ArrayList<>();
 
         retrieveVitrines();

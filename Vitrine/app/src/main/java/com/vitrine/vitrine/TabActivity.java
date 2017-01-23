@@ -2,6 +2,7 @@ package com.vitrine.vitrine;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -41,10 +42,8 @@ import com.vitrine.vitrine.fragments.SubscribedVitrinesFragment;
 
 public class TabActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-
     private User mUser;
-
-
+    public static final String PREFS_NAME = "MyPrefsFile";
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private RequestQueue queue;
@@ -220,8 +219,15 @@ public class TabActivity extends AppCompatActivity implements GoogleApiClient.Co
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_disconnect) {
+            //Disconnect button pressed
+
+            //Remove prefs
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            settings.edit().remove("userJson").apply();
+            //Goto login activity
+            finish();
+
         }
 
         return super.onOptionsItemSelected(item);

@@ -61,9 +61,11 @@ public class LoginActivity extends AppCompatActivity {
                 User user = new User(userJson);
                 Intent intent = new Intent(this, TabActivity.class);
                 intent.putExtra("user", user);
-                startActivity(intent);
+                startActivityForResult(intent, 12);
             } catch (JSONException e) {
                 e.printStackTrace();
+
+                settings.edit().remove("userJson").apply();
             }
         }
 
@@ -147,6 +149,14 @@ public class LoginActivity extends AppCompatActivity {
             queue.add(stringRequest);
             dialog = ProgressDialog.show(this, "",
                     "Loading. Please wait...", true);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 12){
+            finish();
         }
     }
 }

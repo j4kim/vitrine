@@ -73,7 +73,6 @@ public class CreateActivity extends AppCompatActivity {
                 try {
                     final String name = ((EditText)findViewById(R.id.etName)).getText().toString();
 
-                    //TODO pass the user in intent
                     SharedPreferences settings = getSharedPreferences(LoginActivity.PREFS_NAME, 0);
                     final User user = new User(settings.getString("userJson", null));
 
