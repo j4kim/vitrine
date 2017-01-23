@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.CountDownLatch;
+
 public class VitrineActivity extends AppCompatActivity {
 
     private Vitrine mVitrine;
@@ -42,7 +44,7 @@ public class VitrineActivity extends AppCompatActivity {
 
         imgIndex = 0;
 
-        Intent i = getIntent();
+        final Intent i = getIntent();
         mVitrine = i.getParcelableExtra("vitrine");
 
         // Load the picture list
@@ -55,7 +57,6 @@ public class VitrineActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-
                     JSONObject pictureObject = new JSONObject(response);
                     JSONArray pictureArray = pictureObject.getJSONArray("pictures");
 
@@ -85,8 +86,8 @@ public class VitrineActivity extends AppCompatActivity {
             }
         });
         // Add the request to the RequestQueue.
-        queue.add(stringRequest);
         dialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
+        queue.add(stringRequest);
 
 
 
