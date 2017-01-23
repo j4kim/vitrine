@@ -115,6 +115,7 @@ public class ContributeActivity extends AppCompatActivity {
                             if(loading.isShowing())
                                 loading.dismiss();
                             finish();
+                            Toast.makeText(ContributeActivity.this, s, Toast.LENGTH_SHORT).show();
                         }
                     },
                     new Response.ErrorListener() {
