@@ -35,6 +35,7 @@ import com.vitrine.vitrine.TabActivity;
 import com.vitrine.vitrine.Vitrine;
 import com.vitrine.vitrine.VitrineActivity;
 import com.vitrine.vitrine.VitrineInfoActivity;
+import com.vitrine.vitrine.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -185,6 +186,8 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
                                 public void onClick(View view) {
                                     Intent intent = new Intent(getActivity(), VitrineInfoActivity.class);
                                     intent.putExtra("vitrine", vitrine);
+                                    User user = ((TabActivity) getActivity()).getUser();
+                                    intent.putExtra("user", user);
                                     startActivity(intent);
                                 }
                             });

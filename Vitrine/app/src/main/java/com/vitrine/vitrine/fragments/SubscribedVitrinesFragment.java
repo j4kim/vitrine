@@ -71,6 +71,7 @@ public class SubscribedVitrinesFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), VitrineInfoActivity.class);
                 intent.putExtra("vitrine", mVitrineList.get(i));
+                intent.putExtra("user", user);
                 startActivity(intent);
                 return true;
             }

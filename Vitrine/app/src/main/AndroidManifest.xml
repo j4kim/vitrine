@@ -56,6 +56,7 @@
         <activity android:name=".ContributeActivity" />
         <activity android:name=".CreateActivity" />
         <activity android:name=".VitrineActivity" />
+        <activity android:name=".VitrineInfoActivity" />
     </application>
 
 </manifest>

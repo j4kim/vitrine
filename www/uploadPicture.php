@@ -17,9 +17,11 @@
         }
 
 		$file = base64_decode(chunk_split($image), true);
-		
+        
 		file_put_contents($path, $file);
-		echo "Successfully Uploaded";
+        
+        echo "Successfully Uploaded";
+        
     }
     else{
         echo "Error inserting picture in database";

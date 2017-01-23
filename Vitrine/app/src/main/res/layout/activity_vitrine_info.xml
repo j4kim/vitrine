@@ -25,7 +25,15 @@
             android:text="Subscribe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_subscribe" />
+            android:id="@+id/btn_subscribe"
+            android:visibility="gone" />
+
+        <Button
+            android:text="Unsubscribe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_unsubscribe"
+            android:visibility="gone" />
 
     </LinearLayout>
 </RelativeLayout>
