@@ -34,6 +34,7 @@ import com.vitrine.vitrine.R;
 import com.vitrine.vitrine.TabActivity;
 import com.vitrine.vitrine.Vitrine;
 import com.vitrine.vitrine.VitrineActivity;
+import com.vitrine.vitrine.VitrineInfoActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -179,10 +180,10 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
 
                     Snackbar snackbar = Snackbar
                             .make(getView(), vitrine.getName(), Snackbar.LENGTH_LONG)
-                            .setAction("Voir", new View.OnClickListener() {
+                            .setAction("Open", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    Intent intent = new Intent(getActivity(), VitrineActivity.class);
+                                    Intent intent = new Intent(getActivity(), VitrineInfoActivity.class);
                                     intent.putExtra("vitrine", vitrine);
                                     startActivity(intent);
                                 }

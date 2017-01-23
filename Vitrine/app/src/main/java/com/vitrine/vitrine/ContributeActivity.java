@@ -37,8 +37,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
-import static com.google.android.gms.analytics.internal.zzy.w;
-
 public class ContributeActivity extends AppCompatActivity {
 
     private Vitrine mVitrine;

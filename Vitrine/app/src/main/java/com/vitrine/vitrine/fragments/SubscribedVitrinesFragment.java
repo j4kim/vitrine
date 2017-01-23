@@ -23,6 +23,7 @@ import com.vitrine.vitrine.User;
 import com.vitrine.vitrine.Vitrine;
 import com.vitrine.vitrine.VitrineActivity;
 import com.vitrine.vitrine.VitrineAdapter;
+import com.vitrine.vitrine.VitrineInfoActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,10 +60,19 @@ public class SubscribedVitrinesFragment extends Fragment {
         mSubscribedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                 Intent intent = new Intent(getActivity(), VitrineActivity.class);
                 intent.putExtra("vitrine", mVitrineList.get(i));
                 startActivity(intent);
+            }
+        });
+
+        mSubscribedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), VitrineInfoActivity.class);
+                intent.putExtra("vitrine", mVitrineList.get(i));
+                startActivity(intent);
+                return true;
             }
         });
 
