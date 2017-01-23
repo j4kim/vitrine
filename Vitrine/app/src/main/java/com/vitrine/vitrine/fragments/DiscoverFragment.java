@@ -66,10 +66,9 @@ public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
 
         final TabActivity activity = (TabActivity)getActivity();
 
-
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(activity);
-        String url = getString(R.string.subscription_url) + "?token=" + activity.getUser().getToken();
+        String url = getString(R.string.all_vitrines_url);
 
         // Request a string response from the provided URL.
         final StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

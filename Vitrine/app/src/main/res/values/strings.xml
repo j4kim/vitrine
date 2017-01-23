@@ -9,6 +9,7 @@
     <string name="upload_picture_url">http://j4kim.nexgate.ch/vitrine/uploadPicture.php</string>
     <string name="get_vitrines_here_url">http://j4kim.nexgate.ch/vitrine/getvitrinehere.php</string>
     <string name="get_vitrine_image_url">http://j4kim.nexgate.ch/vitrine/</string>
+    <string name="all_vitrines_url">http://j4kim.nexgate.ch/vitrine/getallvitrines.php</string>
 
     <!-- Strings related to LoginActivity -->
     <string name="prompt_username">Username</string>

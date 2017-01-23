@@ -6,14 +6,13 @@
 	$sql = "SELECT * FROM picture WHERE fk_vitrine_id LIKE '".$vitrine_id."'";
 
 	$reponse = $conn->query($sql);
-
-	echo ("{ \"pictures\":[");
-	while ($donnees = $reponse->fetch(PDO::FETCH_ASSOC))
-	{
-		echo (json_encode($donnees));
-		echo (",");
-	}
-	echo ("]}");
+    
+    $pictures = [];
+    while($pic = $reponse->fetch(PDO::FETCH_ASSOC)){
+        $pictures[] = $pic;
+    }
+    echo json_encode(["pictures" => $pictures]);
+    
 
 	$reponse->closeCursor();
 ?>

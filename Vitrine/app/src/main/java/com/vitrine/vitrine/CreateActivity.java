@@ -85,7 +85,6 @@ public class CreateActivity extends AppCompatActivity {
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Toast.makeText(CreateActivity.this, response, Toast.LENGTH_LONG).show();
                             CreateActivity.this.finish();
                         }
                     }, new Response.ErrorListener() {

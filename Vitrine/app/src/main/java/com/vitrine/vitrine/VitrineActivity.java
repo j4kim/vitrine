@@ -60,7 +60,14 @@ public class VitrineActivity extends AppCompatActivity {
                 try {
                     JSONObject pictureObject = new JSONObject(response);
                     JSONArray pictureArray = pictureObject.getJSONArray("pictures");
-                    for (int j = 0; j < pictureArray.length() - 1; j++) {
+
+                    if(pictureArray.length()==0){
+                        finish();
+                        Toast.makeText(vitrineContext, "No pictures in this Vitrine", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    
+                    for (int j = 0; j < pictureArray.length(); j++) {
                         mVitrine.addPicture(pictureArray.getJSONObject(j).getString("path"));
                     }
 
