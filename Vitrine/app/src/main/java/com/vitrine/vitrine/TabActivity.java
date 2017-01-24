@@ -40,6 +40,11 @@ import com.vitrine.vitrine.fragments.ContributeFragment;
 import com.vitrine.vitrine.fragments.DiscoverFragment;
 import com.vitrine.vitrine.fragments.SubscribedVitrinesFragment;
 
+
+/**
+ * Activité principale qui affiche les fragments (sub, contribute, discover)
+ */
+
 public class TabActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private User mUser;

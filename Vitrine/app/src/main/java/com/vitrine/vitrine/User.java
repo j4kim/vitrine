@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by loris.ceschin on 20/11/2016.
+ * Objet utilisateur
  */
 
 public class User implements Parcelable{

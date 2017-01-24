@@ -33,6 +33,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+
+/**
+ * Fragment pour choisir a quelle vitrine contribuer
+ */
+
 public class ContributeFragment extends Fragment {
     // UI references
     private ProgressDialog dialog;

@@ -44,6 +44,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * Fragment avec une carte pour découvrir les vitrines
+ */
+
 public class DiscoverFragment extends Fragment implements OnMapReadyCallback {
 
     ArrayList<Vitrine> mListVitrine;

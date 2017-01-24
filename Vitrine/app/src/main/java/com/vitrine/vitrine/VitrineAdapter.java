@@ -11,8 +11,9 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+
 /**
- * Created by loris ceschin on 20/11/2016.
+ * Adapter pour les listes de vitrines
  */
 
 public class VitrineAdapter extends BaseAdapter {
