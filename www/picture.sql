@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Mar 24 Janvier 2017 à 21:23
+-- Généré le :  Mar 24 Janvier 2017 à 21:24
 -- Version du serveur :  5.5.53-0+deb8u1
 -- Version de PHP :  5.6.29-0+deb8u1
 
@@ -23,38 +23,34 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `vitrine`
+-- Structure de la table `picture`
 --
 
-CREATE TABLE IF NOT EXISTS `vitrine` (
+CREATE TABLE IF NOT EXISTS `picture` (
 `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `radius` int(11) NOT NULL,
-  `latitude` double NOT NULL,
-  `longitude` double NOT NULL,
-  `lastPostDate` date NOT NULL,
-  `color` varchar(12) NOT NULL DEFAULT 'blue'
-) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
+  `path` varchar(200) NOT NULL,
+  `fk_vitrine_id` int(11) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=139 DEFAULT CHARSET=latin1;
 
 --
 -- Index pour les tables exportées
 --
 
 --
--- Index pour la table `vitrine`
+-- Index pour la table `picture`
 --
-ALTER TABLE `vitrine`
- ADD PRIMARY KEY (`id`);
+ALTER TABLE `picture`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `path` (`path`);
 
 --
 -- AUTO_INCREMENT pour les tables exportées
 --
 
 --
--- AUTO_INCREMENT pour la table `vitrine`
+-- AUTO_INCREMENT pour la table `picture`
 --
-ALTER TABLE `vitrine`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=80;
+ALTER TABLE `picture`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=139;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
