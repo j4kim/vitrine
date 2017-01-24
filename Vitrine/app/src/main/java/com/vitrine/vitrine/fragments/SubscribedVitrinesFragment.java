@@ -31,6 +31,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+
+/**
+ * Fragment pour afficher les vitrines auxquelles l'on est abonné
+ */
+
 public class SubscribedVitrinesFragment extends Fragment {
 
     // UI references
@@ -67,6 +72,7 @@ public class SubscribedVitrinesFragment extends Fragment {
             }
         });
 
+        //Start vitrineInfoActivity on longclick on item
         mSubscribedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {

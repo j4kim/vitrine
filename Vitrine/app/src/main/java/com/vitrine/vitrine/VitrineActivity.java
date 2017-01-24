@@ -25,6 +25,10 @@ import org.json.JSONObject;
 
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Activité pour voir les images d'une vitrine
+ */
+
 public class VitrineActivity extends AppCompatActivity {
 
     private Vitrine mVitrine;
@@ -44,6 +48,7 @@ public class VitrineActivity extends AppCompatActivity {
 
         imgIndex = 0;
 
+        // Get the vitrine object
         final Intent i = getIntent();
         mVitrine = i.getParcelableExtra("vitrine");
 
@@ -60,12 +65,14 @@ public class VitrineActivity extends AppCompatActivity {
                     JSONObject pictureObject = new JSONObject(response);
                     JSONArray pictureArray = pictureObject.getJSONArray("pictures");
 
+                    // If there is no pictures
                     if(pictureArray.length()==0){
                         finish();
                         Toast.makeText(vitrineContext, "No pictures in this Vitrine", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
+                    // Add each picture path to the vitrine object
                     for (int j = 0; j < pictureArray.length(); j++) {
                         mVitrine.addPicture(pictureArray.getJSONObject(j).getString("path"));
                     }
@@ -110,18 +117,22 @@ public class VitrineActivity extends AppCompatActivity {
 
         String imgUrl = getString(R.string.get_vitrine_image_url) + mVitrine.getPictureAtIndex(imgIndex);
 
+        // Request to get an image
         ImageRequest request = new ImageRequest(imgUrl,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap bitmap) {
+                        dialog.dismiss();
                         mImageView.setImageBitmap(bitmap);
                     }
                 }, 0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
+                        dialog.dismiss();
                     }
                 });
 
+        dialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
         queue.add(request);
     }
 

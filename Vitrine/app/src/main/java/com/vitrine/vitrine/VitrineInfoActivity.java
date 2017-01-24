@@ -15,6 +15,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+/**
+ * Activité pour s'abonner / se désabonner
+ */
+
 public class VitrineInfoActivity extends AppCompatActivity {
 
     private Vitrine mVitrine;

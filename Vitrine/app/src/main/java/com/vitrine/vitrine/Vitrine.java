@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by loris.ceschin on 20/11/2016.
+ * Objet vitrine
  */
 
 public class Vitrine implements Parcelable {
