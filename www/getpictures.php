@@ -3,7 +3,7 @@
 
 	$vitrine_id = $_GET['vitrine_id'];
 
-	$sql = "SELECT * FROM picture WHERE fk_vitrine_id LIKE '".$vitrine_id."'";
+	$sql = "SELECT * FROM picture WHERE fk_vitrine_id LIKE '".$vitrine_id."' order by path desc";
 
 	$reponse = $conn->query($sql);
     

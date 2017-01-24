@@ -13,6 +13,7 @@
     <string name="is_subscribed">http://j4kim.nexgate.ch/vitrine/isSubscribed.php</string>
     <string name="subscribe">http://j4kim.nexgate.ch/vitrine/subscribe.php</string>
     <string name="unsubscribe">http://j4kim.nexgate.ch/vitrine/unsubscribe.php</string>
+    <string name="signin_url">http://j4kim.nexgate.ch/vitrine/signin.php</string>
 
     <!-- Strings related to LoginActivity -->
     <string name="prompt_username">Username</string>

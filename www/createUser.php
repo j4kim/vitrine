@@ -9,6 +9,12 @@
 
     $sql = "INSERT INTO user (username, password, email, token) VALUES ('$username', '$password', '$email', '$token')";
 
-    if($conn->exec($sql) == 1){
-        echo "User created";
+    try{
+        if($conn->exec($sql) == 1){
+            echo "User created";
+        }
+    } 
+    catch (PDOException $e) {
+        echo "Le nom d'utilisateur est déjà pris<br>";
+        echo 'Exception reçue : ',  $e->getMessage(), "\n";
     }
