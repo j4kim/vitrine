@@ -63,6 +63,7 @@ public class ContributeFragment extends Fragment {
         mVitrineAdapter = new VitrineAdapter(fa, mVitrineList);
         mContributeListView.setAdapter(mVitrineAdapter);
 
+        // Open ContributeActivity on click on list item
         mContributeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -73,6 +74,7 @@ public class ContributeFragment extends Fragment {
             }
         });
 
+        // start createActivity on click on button
         btnNewVitrine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +95,7 @@ public class ContributeFragment extends Fragment {
 
     private void retrieveVitrines(){
 
+        // Retrieve lat and long
         LatLng latLng = ((TabActivity)getActivity()).getLocation();
         String lat = String.valueOf(latLng.latitude);
         String lon = String.valueOf(latLng.longitude);

@@ -72,6 +72,7 @@ public class SubscribedVitrinesFragment extends Fragment {
             }
         });
 
+        //Start vitrineInfoActivity on longclick on item
         mSubscribedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
