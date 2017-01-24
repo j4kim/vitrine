@@ -58,12 +58,13 @@ public class LoginActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                // open the default web browser and provide a register form
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.signin_url)));
                 startActivity(browserIntent);
             }
         });
 
-        //If user persistence exist, pass it to tabActivity and don't show login
+        // If user persistence exist, pass it to tabActivity and don't show login
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.contains("userJson"))
         {

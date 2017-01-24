@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'MyAndroidKey'
+            keyAlias 'myandroidkey'
             keyPassword 'coucou'
             storeFile file('C:/Users/Boh/android.jks')
             storePassword 'coucou'
@@ -12,6 +12,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.vitrine.vitrine"
         minSdkVersion 15
         targetSdkVersion 25

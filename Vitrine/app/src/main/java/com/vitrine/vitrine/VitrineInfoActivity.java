@@ -79,6 +79,7 @@ public class VitrineInfoActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(VitrineInfoActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 }
         );
@@ -133,6 +134,7 @@ public class VitrineInfoActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(VitrineInfoActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 }
         );
